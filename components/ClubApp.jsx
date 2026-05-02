@@ -15,6 +15,7 @@ import {
   Wine,
   Users,
   Sparkles,
+  Wallet,
 } from "lucide-react";
 
 // ───────────────────────────────────────────────────────────────────
@@ -789,6 +790,24 @@ const MembershipScreen = () => (
 
     <p className="text-[10px] tracking-[0.3em] uppercase mt-3 text-center" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
       Tap the card at reception
+    </p>
+
+    <a
+      href="/api/wallet-pass"
+      className="mt-5 w-full py-3.5 flex items-center justify-center gap-2.5 text-[11px] tracking-[0.3em] uppercase no-underline transition-all"
+      style={{
+        color: MARBLE,
+        background: GRAPHITE_2,
+        border: `1px solid ${COBALT}`,
+        fontFamily: fontStack.body,
+        boxShadow: `0 8px 24px -12px ${COBALT}55, inset 0 1px 0 ${MARBLE}11`,
+      }}
+    >
+      <Wallet size={14} strokeWidth={1.6} />
+      Add to Apple Wallet
+    </a>
+    <p className="text-[10px] tracking-[0.3em] uppercase mt-2 text-center" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+      Replace the metal card · works at the door
     </p>
 
     <Divider label="Privileges" />

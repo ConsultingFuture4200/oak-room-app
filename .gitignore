@@ -16,6 +16,15 @@
 # misc
 .DS_Store
 *.pem
+*.p12
+*.key
+
+# pitch materials (repo is public — keep strategic / pricing docs out)
+/docs/pitch/
+
+# PassKit signing certs and generated passes (contain identity data)
+/scripts/pass-cert/
+/public/passes/*.pkpass
 
 # debug
 npm-debug.log*

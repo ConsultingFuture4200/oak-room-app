@@ -1,0 +1,64 @@
+{
+  "formatVersion": 1,
+  "passTypeIdentifier": "pass.com.oakroom.members",
+  "teamIdentifier": "REPLACE_WITH_APPLE_TEAM_ID",
+  "organizationName": "The Oak Room",
+  "description": "The Oak Room Houston · Members Pass",
+  "logoText": "The Oak Room",
+  "foregroundColor": "rgb(244, 241, 234)",
+  "backgroundColor": "rgb(28, 29, 32)",
+  "labelColor": "rgb(43, 108, 176)",
+  "generic": {
+    "primaryFields": [
+      {
+        "key": "name",
+        "label": "MEMBER",
+        "value": "Tilman Fertitta"
+      }
+    ],
+    "secondaryFields": [
+      {
+        "key": "tier",
+        "label": "TIER",
+        "value": "Founders"
+      },
+      {
+        "key": "memberNo",
+        "label": "NO.",
+        "value": "№ 0001"
+      }
+    ],
+    "auxiliaryFields": [
+      {
+        "key": "joined",
+        "label": "MEMBER SINCE",
+        "value": "MMXXVI"
+      }
+    ],
+    "backFields": [
+      {
+        "key": "concierge",
+        "label": "Concierge",
+        "value": "713.386.2500"
+      },
+      {
+        "key": "address",
+        "label": "The Oak Room",
+        "value": "1600 West Loop South · Houston, TX 77027"
+      },
+      {
+        "key": "rules",
+        "label": "House",
+        "value": "Discretion above all. Jacket required after 8pm. What is said at the bar stays at the bar."
+      }
+    ]
+  },
+  "barcodes": [
+    {
+      "format": "PKBarcodeFormatQR",
+      "message": "OR-0001-FNDR",
+      "messageEncoding": "iso-8859-1",
+      "altText": "OR-0001-FNDR"
+    }
+  ]
+}
