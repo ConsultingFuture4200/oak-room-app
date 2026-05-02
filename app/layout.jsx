@@ -2,7 +2,25 @@ import "./globals.css";
 
 export const metadata = {
   title: "Oak Room Houston",
-  description: "A members' app for The Oak Room at The Post Oak Hotel",
+  description: "A members' app for The Oak Room at The Post Oak Hotel.",
+  applicationName: "Oak Room",
+  appleWebApp: {
+    capable: true,
+    title: "Oak Room",
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport = {
+  themeColor: "#1C1D20",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }) {
