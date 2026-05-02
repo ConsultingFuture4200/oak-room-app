@@ -1003,15 +1003,94 @@ const RulesScreen = () => (
 );
 
 // ─── App shell ─────────────────────────────────────────────────────
+// Five tabs. TABS[2] (reserve) is rendered as the elevated CenterTab.
+// Order matters — the tab bar slices into [0,2), [2], [3,5).
 const TABS = [
   { id: "foryou", label: "For You", Icon: Sparkles },
   { id: "home", label: "Events", Icon: Calendar },
-  { id: "guests", label: "Guests", Icon: UserPlus },
   { id: "reserve", label: "Reserve", Icon: Wine },
   { id: "card", label: "Member", Icon: Users },
   { id: "rules", label: "House", Icon: BookOpen },
-  { id: "billing", label: "Ledger", Icon: CreditCard },
 ];
+
+// Flat tab — the four non-center tabs.
+const FlatTab = ({ tab, active, onClick }) => {
+  const { id, label, Icon } = tab;
+  return (
+    <button
+      key={id}
+      role="tab"
+      aria-selected={active}
+      aria-label={label}
+      onClick={onClick}
+      className="flex flex-col items-center gap-1 py-1 px-1 transition-all"
+      style={{ color: active ? COBALT : MARBLE + "55" }}
+    >
+      <Icon size={16} strokeWidth={active ? 2 : 1.5} />
+      <span
+        className="text-[10px] tracking-[0.2em] uppercase"
+        style={{ fontFamily: fontStack.body, fontWeight: active ? 500 : 300 }}
+      >
+        {label}
+      </span>
+      <motion.div
+        className="w-1 h-1 rounded-full"
+        initial={false}
+        animate={{ opacity: active ? 1 : 0, scale: active ? 1 : 0 }}
+        transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94] }}
+        style={{ background: COBALT }}
+      />
+    </button>
+  );
+};
+
+// Reserve gets the Venmo-style center treatment — larger icon, cobalt ring,
+// lifted upward when active. No shared dot — the lift IS the active indicator.
+const CenterTab = ({ tab, active, onClick }) => {
+  const { id, label, Icon } = tab;
+  return (
+    <button
+      key={id}
+      role="tab"
+      aria-selected={active}
+      aria-label={label}
+      onClick={onClick}
+      className="relative flex flex-col items-center justify-center -mt-3"
+      style={{ width: 64 }}
+    >
+      <motion.div
+        initial={false}
+        animate={{ y: active ? -8 : 0, scale: active ? 1.05 : 1 }}
+        transition={{ type: "spring", stiffness: 320, damping: 22 }}
+        className="flex items-center justify-center rounded-full"
+        style={{
+          width: 52,
+          height: 52,
+          background: active
+            ? `linear-gradient(160deg, ${COBALT} 0%, ${COBALT_DEEP} 100%)`
+            : GRAPHITE_2,
+          border: `1px solid ${active ? COBALT : VEIN + "55"}`,
+          boxShadow: active
+            ? `0 12px 28px -10px ${COBALT}77, inset 0 1px 0 ${MARBLE}22`
+            : `0 4px 12px -4px ${COBALT}22, inset 0 1px 0 ${MARBLE}11`,
+          color: active ? MARBLE : COBALT,
+        }}
+      >
+        <Icon size={22} strokeWidth={active ? 2 : 1.6} />
+      </motion.div>
+      <span
+        className="text-[10px] tracking-[0.2em] uppercase mt-1"
+        style={{
+          fontFamily: fontStack.body,
+          fontWeight: active ? 500 : 300,
+          color: active ? COBALT : MARBLE + "66",
+        }}
+      >
+        {label}
+      </span>
+    </button>
+  );
+};
 
 export default function ClubApp() {
   const [tab, setTab] = useState("foryou");
@@ -1149,9 +1228,7 @@ export default function ClubApp() {
                   />
                 )}
                 {tab === "home" && <HomeScreen events={events} onRSVP={handleRSVP} />}
-                {tab === "guests" && <GuestsScreen guests={guests} onAdd={handleAddGuest} />}
-                {tab === "card" && <MembershipScreen />}
-                {tab === "billing" && <BillingScreen />}
+                {tab === "card" && <MembershipScreen guests={guests} />}
                 {tab === "reserve" && <ReserveScreen />}
                 {tab === "rules" && <RulesScreen />}
               </motion.div>
@@ -1183,45 +1260,24 @@ export default function ClubApp() {
             )}
           </AnimatePresence>
 
-          {/* Tab bar */}
+          {/* Tab bar — three-section grid: [flat flat] [CENTER] [flat flat] */}
           <div
             role="tablist"
             aria-label="Oak Room navigation"
-            className="flex-shrink-0 flex items-center justify-around px-2 pb-5 pt-3"
+            className="flex-shrink-0 grid items-end px-3 pb-5 pt-3"
             style={{
+              gridTemplateColumns: "1fr 1fr auto 1fr 1fr",
               background: `linear-gradient(180deg, transparent, ${GRAPHITE} 30%)`,
               borderTop: `1px solid ${VEIN}33`,
             }}
           >
-            {TABS.map(({ id, label, Icon }) => {
-              const active = tab === id;
-              return (
-                <button
-                  key={id}
-                  role="tab"
-                  aria-selected={active}
-                  aria-label={label}
-                  onClick={() => setTab(id)}
-                  className="flex flex-col items-center gap-1 py-1 px-1 transition-all"
-                  style={{ color: active ? COBALT : MARBLE + "55" }}
-                >
-                  <Icon size={16} strokeWidth={active ? 2 : 1.5} />
-                  <span
-                    className="text-[10px] tracking-[0.2em] uppercase"
-                    style={{ fontFamily: fontStack.body, fontWeight: active ? 500 : 300 }}
-                  >
-                    {label}
-                  </span>
-                  {active && (
-                    <motion.div
-                      layoutId="tab-dot"
-                      className="w-1 h-1 rounded-full"
-                      style={{ background: COBALT }}
-                    />
-                  )}
-                </button>
-              );
-            })}
+            {TABS.slice(0, 2).map((t) => (
+              <FlatTab key={t.id} tab={t} active={tab === t.id} onClick={() => setTab(t.id)} />
+            ))}
+            <CenterTab tab={TABS[2]} active={tab === TABS[2].id} onClick={() => setTab(TABS[2].id)} />
+            {TABS.slice(3).map((t) => (
+              <FlatTab key={t.id} tab={t} active={tab === t.id} onClick={() => setTab(t.id)} />
+            ))}
           </div>
         </div>
       </div>
