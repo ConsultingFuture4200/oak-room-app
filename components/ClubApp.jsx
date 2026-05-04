@@ -36,6 +36,13 @@ const VEIN = "#9AA3AE";          // cool grey vein — borders, dividers, SVG st
 const VEIN_TEXT = "#B8C2CC";     // brighter vein — text-only, ≈5.2:1 on GRAPHITE for WCAG AA
 const TEXT_DIM = "#A4A8AE";      // bumped from #8B8E94 for AA contrast
 
+// Wallet pass — AMEX Centurion-inspired palette, used by WalletPassFace
+// + scripts/pass-template.pass/pass.json. Different from the in-app cobalt
+// accent to give the wallet card a distinct ultra-luxury register.
+const PASS_BG = "#0A0A0B";       // near-black, slight warmth
+const PASS_FG = "#E8E2D2";       // warm cream / faint marble
+const CHAMPAGNE = "#B49C6E";     // antique gold accent — labels, tree mark
+
 const fontStack = {
   display: "'Canela', 'GT Super Display', 'Cormorant Garamond', Georgia, serif",
   body: "'Söhne', 'Inter Tight', 'Helvetica Neue', sans-serif",
@@ -745,27 +752,65 @@ const WalletPassFace = () => (
     style={{
       aspectRatio: "5 / 8",
       maxWidth: 260,
-      background: GRAPHITE,
+      background: `radial-gradient(ellipse at 50% 30%, #15151700 0%, ${PASS_BG} 70%), ${PASS_BG}`,
       borderRadius: 18,
-      color: MARBLE,
+      color: PASS_FG,
       boxShadow: `
-        0 30px 60px -30px rgba(0,0,0,0.7),
-        0 0 0 1px rgba(255,255,255,0.05),
-        inset 0 1px 0 rgba(255,255,255,0.12)
+        0 30px 60px -30px rgba(0,0,0,0.85),
+        0 0 0 1px rgba(180,156,110,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.05)
       `,
     }}
   >
-    {/* Top — header + NFC waves */}
-    <div className="px-5 pt-5 flex items-start justify-between">
+    {/* Tree silhouette watermark — AMEX Centurion-style relief mark behind the text */}
+    <svg
+      className="absolute pointer-events-none"
+      style={{ top: "8%", left: "50%", transform: "translateX(-50%)", width: "60%", opacity: 0.06 }}
+      viewBox="0 0 200 200"
+      aria-hidden="true"
+    >
+      <g fill={CHAMPAGNE}>
+        <path d="M93,180 L93,115 Q97,108 100,109 Q103,108 107,115 L107,180 Z" />
+        <ellipse cx="100" cy="178" rx="14" ry="3" />
+        <ellipse cx="100" cy="68" rx="56" ry="48" />
+        <ellipse cx="62" cy="86" rx="36" ry="30" />
+        <ellipse cx="138" cy="84" rx="38" ry="32" />
+        <ellipse cx="80" cy="46" rx="32" ry="26" />
+        <ellipse cx="120" cy="44" rx="34" ry="28" />
+        <ellipse cx="100" cy="34" rx="26" ry="22" />
+      </g>
+    </svg>
+
+    {/* Top — wordmark + NFC waves */}
+    <div className="relative px-5 pt-5 flex items-start justify-between">
       <div>
-        <p className="text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: fontStack.body, color: COBALT, fontWeight: 500 }}>
+        <p
+          className="text-base"
+          style={{
+            fontFamily: fontStack.display,
+            color: CHAMPAGNE,
+            fontWeight: 400,
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+          }}
+        >
           The Oak Room
         </p>
-        <p className="text-[10px] mt-1 italic" style={{ fontFamily: fontStack.display, color: MARBLE + "AA" }}>
+        <p className="text-[10px] mt-1 italic" style={{ fontFamily: fontStack.display, color: PASS_FG + "AA" }}>
           The Post Oak Hotel · Houston
         </p>
       </div>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" style={{ color: MARBLE + "99" }} aria-hidden="true">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        style={{ color: CHAMPAGNE + "AA" }}
+        aria-hidden="true"
+      >
         <path d="M6 6 Q 13 12 6 18" />
         <path d="M10 6 Q 17 12 10 18" />
         <path d="M14 6 Q 21 12 14 18" />
@@ -773,41 +818,44 @@ const WalletPassFace = () => (
     </div>
 
     {/* Primary field — Member name */}
-    <div className="px-5 mt-7">
-      <p className="text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: fontStack.body, color: COBALT, fontWeight: 500 }}>
+    <div className="relative px-5 mt-8">
+      <p className="text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: fontStack.body, color: CHAMPAGNE, fontWeight: 500 }}>
         Member
       </p>
-      <p className="text-2xl mt-1 leading-tight" style={{ fontFamily: fontStack.display, fontWeight: 400, letterSpacing: "-0.01em", color: MARBLE }}>
+      <p
+        className="text-2xl mt-1 leading-tight"
+        style={{ fontFamily: fontStack.display, fontWeight: 400, letterSpacing: "-0.01em", color: PASS_FG }}
+      >
         {MEMBER.name}
       </p>
     </div>
 
     {/* Secondary fields */}
-    <div className="px-5 mt-5 flex gap-7">
+    <div className="relative px-5 mt-5 flex gap-7">
       <div>
-        <p className="text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: fontStack.body, color: COBALT, fontWeight: 500 }}>
+        <p className="text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: fontStack.body, color: CHAMPAGNE, fontWeight: 500 }}>
           Tier
         </p>
-        <p className="text-base mt-1 italic" style={{ fontFamily: fontStack.display, color: MARBLE }}>
+        <p className="text-base mt-1 italic" style={{ fontFamily: fontStack.display, color: PASS_FG }}>
           {MEMBER.tier}
         </p>
       </div>
       <div>
-        <p className="text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: fontStack.body, color: COBALT, fontWeight: 500 }}>
+        <p className="text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: fontStack.body, color: CHAMPAGNE, fontWeight: 500 }}>
           No.
         </p>
-        <p className="text-base mt-1 italic" style={{ fontFamily: fontStack.display, color: MARBLE }}>
+        <p className="text-base mt-1 italic" style={{ fontFamily: fontStack.display, color: PASS_FG }}>
           {MEMBER.memberNo}
         </p>
       </div>
     </div>
 
     {/* Auxiliary — member since */}
-    <div className="px-5 mt-4">
-      <p className="text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: fontStack.body, color: COBALT, fontWeight: 500 }}>
+    <div className="relative px-5 mt-4">
+      <p className="text-[9px] tracking-[0.4em] uppercase" style={{ fontFamily: fontStack.body, color: CHAMPAGNE, fontWeight: 500 }}>
         Member Since
       </p>
-      <p className="text-sm mt-1 italic" style={{ fontFamily: fontStack.display, color: MARBLE + "DD" }}>
+      <p className="text-sm mt-1 italic" style={{ fontFamily: fontStack.display, color: PASS_FG + "DD" }}>
         {MEMBER.joined}
       </p>
     </div>
