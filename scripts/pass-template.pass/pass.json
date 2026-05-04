@@ -7,7 +7,7 @@
   "foregroundColor": "rgb(31, 29, 26)",
   "backgroundColor": "rgb(176, 168, 156)",
   "labelColor": "rgb(70, 65, 58)",
-  "generic": {
+  "storeCard": {
     "primaryFields": [
       {
         "key": "name",
