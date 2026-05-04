@@ -3,8 +3,9 @@ import type { MetadataRoute } from "next";
 // PWA manifest. Served at /manifest.webmanifest.
 //
 // On iPhone: Safari → Share → "Add to Home Screen" reads this manifest
-// to install the app full-screen with the cobalt status bar and Oak
-// Room icon. No App Store, no TestFlight, no Apple review.
+// to install the app full-screen with a graphite status bar and the
+// Post Oak silhouette home-screen icon. No App Store, no TestFlight,
+// no Apple review.
 //
 // theme_color and background_color match the in-app graphite so the
 // status bar and splash screen feel native, not like a webview.
@@ -28,7 +29,7 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: "any",
       },
       {
-        src: "/apple-icon",
+        src: "/apple-icon.png",
         sizes: "180x180",
         type: "image/png",
         purpose: "maskable",

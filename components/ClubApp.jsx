@@ -22,11 +22,11 @@ import {
 
 // ───────────────────────────────────────────────────────────────────
 // THE OAK ROOM HOUSTON — at The Post Oak Hotel, a Fertitta property
-// Graphite + Carrara marble • cobalt accents
+// Graphite + Carrara marble • antique-brass accents
 // ───────────────────────────────────────────────────────────────────
 
-const COBALT = "#2B6CB0";        // the accent — true royal blue, members'-club presence
-const COBALT_DEEP = "#1A4A8C";
+const BRASS = "#B8945A";        // antique brass — single accent, echoes the brushed-steel pass
+const BRASS_DEEP = "#8E6E3F";   // deeper brass for gradients, hover, pressed states
 const GRAPHITE = "#1C1D20";      // primary surface
 const GRAPHITE_2 = "#26282C";    // raised surface
 const CHARCOAL = "#0F1012";      // deepest
@@ -38,7 +38,7 @@ const TEXT_DIM = "#A4A8AE";      // bumped from #8B8E94 for AA contrast
 
 // Wallet pass — matches the physical Oak Room metal card: brushed warm
 // silver, dark engraved oak, framed "OAK ROOM PRIVATE" wordmark. Different
-// from the in-app cobalt accent so the wallet card reads as a separate
+// from the in-app brass accent so the wallet card reads as a separate
 // (collectible) object.
 const STEEL_HI = "#D8D2C4";      // warm silver highlight
 const STEEL_MID = "#B0A89C";     // brushed mid-tone
@@ -174,7 +174,7 @@ const BrassButton = ({ children, onClick, variant = "solid", className = "" }) =
         onClick={onClick}
         className={`${base} ${className}`}
         style={{
-          color: COBALT,
+          color: BRASS,
           border: `1px solid ${VEIN}`,
           fontFamily: fontStack.body,
           background: "transparent",
@@ -190,9 +190,9 @@ const BrassButton = ({ children, onClick, variant = "solid", className = "" }) =
       className={`${base} ${className}`}
       style={{
         color: GRAPHITE,
-        background: `linear-gradient(180deg, ${COBALT} 0%, ${VEIN} 100%)`,
+        background: `linear-gradient(180deg, ${BRASS} 0%, ${VEIN} 100%)`,
         fontFamily: fontStack.body,
-        boxShadow: `0 1px 0 ${COBALT}88 inset, 0 8px 24px -12px ${COBALT}55`,
+        boxShadow: `0 1px 0 ${BRASS}88 inset, 0 8px 24px -12px ${BRASS}55`,
       }}
     >
       {children}
@@ -232,7 +232,7 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
         className="text-4xl mt-2 leading-none"
         style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400, letterSpacing: "-0.01em" }}
       >
-        A quiet <em style={{ color: COBALT }}>welcome</em>
+        A quiet <em style={{ color: BRASS }}>welcome</em>
       </h1>
 
       {/* Note from the club */}
@@ -243,15 +243,15 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
         className="relative mt-5 p-5 overflow-hidden"
         style={{
           background: `linear-gradient(160deg, ${GRAPHITE_2} 0%, ${GRAPHITE} 100%)`,
-          border: `1px solid ${COBALT}55`,
+          border: `1px solid ${BRASS}55`,
         }}
       >
-        <span className="absolute top-0 left-0 w-2.5 h-2.5 border-t border-l" style={{ borderColor: COBALT }} />
-        <span className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r" style={{ borderColor: COBALT }} />
-        <span className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l" style={{ borderColor: COBALT }} />
-        <span className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b border-r" style={{ borderColor: COBALT }} />
+        <span className="absolute top-0 left-0 w-2.5 h-2.5 border-t border-l" style={{ borderColor: BRASS }} />
+        <span className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r" style={{ borderColor: BRASS }} />
+        <span className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l" style={{ borderColor: BRASS }} />
+        <span className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b border-r" style={{ borderColor: BRASS }} />
 
-        <p className="text-[9px] tracking-[0.4em] uppercase" style={{ color: COBALT, fontFamily: fontStack.body, fontWeight: 500 }}>
+        <p className="text-[9px] tracking-[0.4em] uppercase" style={{ color: BRASS, fontFamily: fontStack.body, fontWeight: 500 }}>
           A note from the club
         </p>
         <p
@@ -284,7 +284,7 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] tracking-[0.3em]" style={{ color: COBALT, fontFamily: fontStack.body, fontWeight: 500 }}>
+                <p className="text-[10px] tracking-[0.3em]" style={{ color: BRASS, fontFamily: fontStack.body, fontWeight: 500 }}>
                   {e.date} · {e.time}
                 </p>
                 <h3
@@ -303,8 +303,8 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
               <span
                 className="text-[9px] tracking-[0.3em] uppercase px-2 py-1 flex-shrink-0 flex items-center gap-1"
                 style={{
-                  color: e.rsvp ? COBALT : MARBLE + "AA",
-                  border: `1px solid ${e.rsvp ? COBALT : VEIN}`,
+                  color: e.rsvp ? BRASS : MARBLE + "AA",
+                  border: `1px solid ${e.rsvp ? BRASS : VEIN}`,
                   fontFamily: fontStack.body,
                 }}
               >
@@ -342,7 +342,7 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
         </div>
         <span
           className="text-[9px] tracking-[0.3em] uppercase px-2 py-1"
-          style={{ color: COBALT, border: `1px solid ${COBALT}`, fontFamily: fontStack.body }}
+          style={{ color: BRASS, border: `1px solid ${BRASS}`, fontFamily: fontStack.body }}
         >
           Hold it
         </span>
@@ -391,8 +391,8 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
           className="w-full mt-4 py-3 text-[10px] tracking-[0.3em] uppercase flex items-center justify-center gap-2"
           style={{
             color: note.trim() ? MARBLE : MARBLE + "55",
-            background: note.trim() ? COBALT : "transparent",
-            border: `1px solid ${note.trim() ? COBALT : VEIN + "55"}`,
+            background: note.trim() ? BRASS : "transparent",
+            border: `1px solid ${note.trim() ? BRASS : VEIN + "55"}`,
             fontFamily: fontStack.body,
             transition: "all 0.2s",
           }}
@@ -420,7 +420,7 @@ const HomeScreen = ({ events, onRSVP }) => {
             className="text-3xl leading-none mt-1"
             style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400, letterSpacing: "-0.01em" }}
           >
-            The book of <em style={{ color: COBALT }}>hours</em>
+            The book of <em style={{ color: BRASS }}>hours</em>
           </h1>
         </div>
         <span className="text-[9px] tracking-[0.3em] uppercase pb-1" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
@@ -444,15 +444,15 @@ const HomeScreen = ({ events, onRSVP }) => {
               border: `1px solid ${VEIN}33`,
             }}
           >
-            <span className="absolute top-0 left-0 w-2.5 h-2.5 border-t border-l" style={{ borderColor: COBALT }} />
-            <span className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r" style={{ borderColor: COBALT }} />
-            <span className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l" style={{ borderColor: COBALT }} />
-            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b border-r" style={{ borderColor: COBALT }} />
+            <span className="absolute top-0 left-0 w-2.5 h-2.5 border-t border-l" style={{ borderColor: BRASS }} />
+            <span className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r" style={{ borderColor: BRASS }} />
+            <span className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l" style={{ borderColor: BRASS }} />
+            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b border-r" style={{ borderColor: BRASS }} />
 
             {e.rsvp && (
               <span
                 className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full"
-                style={{ background: COBALT, boxShadow: `0 0 8px ${COBALT}` }}
+                style={{ background: BRASS, boxShadow: `0 0 8px ${BRASS}` }}
               />
             )}
 
@@ -460,7 +460,7 @@ const HomeScreen = ({ events, onRSVP }) => {
               <div>
                 <p
                   className="text-[10px] tracking-[0.3em]"
-                  style={{ color: COBALT, fontFamily: fontStack.body, fontWeight: 500 }}
+                  style={{ color: BRASS, fontFamily: fontStack.body, fontWeight: 500 }}
                 >
                   {e.date}
                 </p>
@@ -508,14 +508,14 @@ const HomeScreen = ({ events, onRSVP }) => {
               className="relative w-full max-w-sm overflow-hidden flex flex-col"
               style={{
                 background: `linear-gradient(160deg, ${GRAPHITE_2} 0%, ${GRAPHITE} 100%)`,
-                border: `1px solid ${COBALT}`,
+                border: `1px solid ${BRASS}`,
                 boxShadow: `0 20px 60px -10px rgba(0,0,0,0.8)`,
               }}
             >
-              <span className="absolute top-0 left-0 w-3 h-3 border-t border-l" style={{ borderColor: COBALT }} />
-              <span className="absolute top-0 right-0 w-3 h-3 border-t border-r" style={{ borderColor: COBALT }} />
-              <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l" style={{ borderColor: COBALT }} />
-              <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r" style={{ borderColor: COBALT }} />
+              <span className="absolute top-0 left-0 w-3 h-3 border-t border-l" style={{ borderColor: BRASS }} />
+              <span className="absolute top-0 right-0 w-3 h-3 border-t border-r" style={{ borderColor: BRASS }} />
+              <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l" style={{ borderColor: BRASS }} />
+              <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r" style={{ borderColor: BRASS }} />
 
               <button
                 onClick={() => setExpandedId(null)}
@@ -528,7 +528,7 @@ const HomeScreen = ({ events, onRSVP }) => {
               <div className="p-5">
                 <p
                   className="text-[10px] tracking-[0.4em]"
-                  style={{ color: COBALT, fontFamily: fontStack.body, fontWeight: 500 }}
+                  style={{ color: BRASS, fontFamily: fontStack.body, fontWeight: 500 }}
                 >
                   {expanded.date} · {expanded.time}
                 </p>
@@ -539,7 +539,7 @@ const HomeScreen = ({ events, onRSVP }) => {
                   {expanded.title}
                 </h2>
 
-                <div className="my-4 h-px" style={{ background: `linear-gradient(to right, ${COBALT}, transparent)` }} />
+                <div className="my-4 h-px" style={{ background: `linear-gradient(to right, ${BRASS}, transparent)` }} />
 
                 <p
                   className="text-sm italic leading-relaxed"
@@ -566,9 +566,9 @@ const HomeScreen = ({ events, onRSVP }) => {
                   }}
                   className="w-full py-3 mt-5 text-[10px] tracking-[0.3em] uppercase"
                   style={{
-                    color: expanded.rsvp ? COBALT : MARBLE,
-                    background: expanded.rsvp ? "transparent" : COBALT,
-                    border: `1px solid ${COBALT}`,
+                    color: expanded.rsvp ? BRASS : MARBLE,
+                    background: expanded.rsvp ? "transparent" : BRASS,
+                    border: `1px solid ${BRASS}`,
                     fontFamily: fontStack.body,
                   }}
                 >
@@ -605,7 +605,7 @@ const GuestsScreen = ({ guests, onAdd }) => {
         className="text-4xl mt-2 leading-none"
         style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}
       >
-        Your <em style={{ color: COBALT }}>guests</em>
+        Your <em style={{ color: BRASS }}>guests</em>
       </h1>
       <p className="text-xs mt-3 leading-relaxed" style={{ color: MARBLE + "88", fontFamily: fontStack.body }}>
         Added guests receive a text with their name on the list and the address. The front desk sees this register the moment you send it.
@@ -639,8 +639,8 @@ const GuestsScreen = ({ guests, onAdd }) => {
             <span
               className="text-[9px] tracking-[0.3em] uppercase px-2 py-1 flex items-center gap-1"
               style={{
-                color: g.status === "Confirmed" ? COBALT : MARBLE + "AA",
-                border: `1px solid ${g.status === "Confirmed" ? COBALT : VEIN}`,
+                color: g.status === "Confirmed" ? BRASS : MARBLE + "AA",
+                border: `1px solid ${g.status === "Confirmed" ? BRASS : VEIN}`,
                 fontFamily: fontStack.body,
               }}
             >
@@ -659,9 +659,9 @@ const GuestsScreen = ({ guests, onAdd }) => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="mt-5 p-5 overflow-hidden"
-            style={{ background: GRAPHITE_2, border: `1px solid ${COBALT}` }}
+            style={{ background: GRAPHITE_2, border: `1px solid ${BRASS}` }}
           >
-            <p className="text-[10px] tracking-[0.4em] uppercase mb-4" style={{ color: COBALT, fontFamily: fontStack.body }}>
+            <p className="text-[10px] tracking-[0.4em] uppercase mb-4" style={{ color: BRASS, fontFamily: fontStack.body }}>
               New guest
             </p>
             <input
@@ -700,7 +700,7 @@ const GuestsScreen = ({ guests, onAdd }) => {
           onClick={() => setAdding(true)}
           className="mt-5 w-full py-4 flex items-center justify-center gap-2 text-[11px] tracking-[0.4em] uppercase"
           style={{
-            color: COBALT,
+            color: BRASS,
             border: `1px dashed ${VEIN}`,
             fontFamily: fontStack.body,
           }}
@@ -975,7 +975,7 @@ const LedgerCard = () => {
       className="relative overflow-hidden p-5 text-center"
       style={{ background: GRAPHITE_2, border: `1px solid ${VEIN}55` }}
       animate={{
-        borderColor: settled ? COBALT + "AA" : VEIN + "55",
+        borderColor: settled ? BRASS + "AA" : VEIN + "55",
       }}
       transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
     >
@@ -990,7 +990,7 @@ const LedgerCard = () => {
             className="absolute inset-y-0 pointer-events-none"
             style={{
               width: "60%",
-              background: `linear-gradient(90deg, transparent 0%, ${COBALT}55 50%, transparent 100%)`,
+              background: `linear-gradient(90deg, transparent 0%, ${BRASS}55 50%, transparent 100%)`,
               filter: "blur(14px)",
             }}
           />
@@ -1006,7 +1006,7 @@ const LedgerCard = () => {
             transition={{ duration: 1.4, ease: [0.23, 1, 0.32, 1] }}
             className="absolute inset-0 pointer-events-none"
             style={{
-              border: `1px solid ${COBALT}88`,
+              border: `1px solid ${BRASS}88`,
               borderRadius: 2,
             }}
           />
@@ -1055,8 +1055,8 @@ const LedgerCard = () => {
                   width: 28,
                   height: 28,
                   borderRadius: 999,
-                  border: `1px solid ${COBALT}`,
-                  color: COBALT,
+                  border: `1px solid ${BRASS}`,
+                  color: BRASS,
                 }}
               >
                 <Check size={14} strokeWidth={2.2} />
@@ -1115,7 +1115,7 @@ const MembershipScreen = ({ guests = [] }) => (
       Bona fides
     </p>
     <h1 className="text-4xl mt-2 leading-none" style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}>
-      Your <em style={{ color: COBALT }}>standing</em>
+      Your <em style={{ color: BRASS }}>standing</em>
     </h1>
 
     <Divider label="The card" />
@@ -1214,9 +1214,9 @@ const MembershipScreen = ({ guests = [] }) => (
       style={{
         color: MARBLE,
         background: GRAPHITE_2,
-        border: `1px solid ${COBALT}`,
+        border: `1px solid ${BRASS}`,
         fontFamily: fontStack.body,
-        boxShadow: `0 8px 24px -12px ${COBALT}55, inset 0 1px 0 ${MARBLE}11`,
+        boxShadow: `0 8px 24px -12px ${BRASS}55, inset 0 1px 0 ${MARBLE}11`,
       }}
     >
       <Wallet size={14} strokeWidth={1.6} />
@@ -1240,7 +1240,7 @@ const MembershipScreen = ({ guests = [] }) => (
           <span className="text-[11px] tracking-[0.2em] uppercase" style={{ color: MARBLE + "AA", fontFamily: fontStack.body }}>
             {p.k}
           </span>
-          <span className="text-sm" style={{ color: COBALT, fontFamily: fontStack.display, fontStyle: "italic" }}>
+          <span className="text-sm" style={{ color: BRASS, fontFamily: fontStack.display, fontStyle: "italic" }}>
             {p.v}
           </span>
         </div>
@@ -1258,7 +1258,7 @@ const MembershipScreen = ({ guests = [] }) => (
         {guests.slice(0, 3).map((g) => {
           const isConfirmed = g.status === "Confirmed";
           const isPending = g.status === "Pending";
-          const accent = isConfirmed ? COBALT : isPending ? "#C04A4A" : VEIN_TEXT;
+          const accent = isConfirmed ? BRASS : isPending ? "#C04A4A" : VEIN_TEXT;
           return (
             <div
               key={g.id}
@@ -1311,7 +1311,7 @@ const MembershipScreen = ({ guests = [] }) => (
           <span
             className="font-light"
             style={{
-              color: t.positive ? COBALT : MARBLE,
+              color: t.positive ? BRASS : MARBLE,
               fontFamily: fontStack.mono,
               fontSize: 14,
             }}
@@ -1496,7 +1496,7 @@ const SmsPassMockup = ({ guestName, event, totalCount }) => {
         >
           <p
             className="text-[9px] tracking-[0.32em] uppercase mb-2"
-            style={{ color: COBALT, fontFamily: fontStack.body }}
+            style={{ color: BRASS, fontFamily: fontStack.body }}
           >
             The Oak Room
           </p>
@@ -1514,15 +1514,15 @@ const SmsPassMockup = ({ guestName, event, totalCount }) => {
           <div
             className="flex items-center gap-2 mt-3 px-3 py-2"
             style={{
-              background: COBALT + "22",
-              border: `1px solid ${COBALT}55`,
+              background: BRASS + "22",
+              border: `1px solid ${BRASS}55`,
               borderRadius: 10,
             }}
           >
-            <Wallet size={14} style={{ color: COBALT }} />
+            <Wallet size={14} style={{ color: BRASS }} />
             <p
               className="text-[11px] tracking-[0.18em] uppercase"
-              style={{ color: COBALT, fontFamily: fontStack.body }}
+              style={{ color: BRASS, fontFamily: fontStack.body }}
             >
               Add to Apple Wallet
             </p>
@@ -1622,7 +1622,7 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
                 <div className="px-6 mt-4">
                   <p
                     className="text-[10px] tracking-[0.4em] uppercase mb-3"
-                    style={{ color: COBALT, fontFamily: fontStack.body }}
+                    style={{ color: BRASS, fontFamily: fontStack.body }}
                   >
                     Your guests
                   </p>
@@ -1670,10 +1670,10 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
                     className="w-full py-3 text-[11px] tracking-[0.32em] uppercase transition-opacity"
                     style={{
                       color: GRAPHITE,
-                      background: `linear-gradient(180deg, ${COBALT} 0%, ${COBALT_DEEP} 100%)`,
+                      background: `linear-gradient(180deg, ${BRASS} 0%, ${BRASS_DEEP} 100%)`,
                       fontFamily: fontStack.body,
                       opacity: canSubmit ? 1 : 0.4,
-                      boxShadow: `0 1px 0 ${COBALT}88 inset, 0 12px 30px -16px ${COBALT}88`,
+                      boxShadow: `0 1px 0 ${BRASS}88 inset, 0 12px 30px -16px ${BRASS}88`,
                     }}
                   >
                     {state.status === "sending"
@@ -1711,7 +1711,7 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
         className="text-4xl mt-2 leading-none"
         style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}
       >
-        <em style={{ color: COBALT }}>Reserve</em>
+        <em style={{ color: BRASS }}>Reserve</em>
       </h1>
 
       <Divider label="Upcoming · open seats" />
@@ -1724,20 +1724,20 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
             className="w-full text-left p-4 transition-colors"
             style={{
               background: GRAPHITE_2,
-              border: `1px solid ${e.rsvp ? COBALT + "66" : VEIN + "22"}`,
+              border: `1px solid ${e.rsvp ? BRASS + "66" : VEIN + "22"}`,
             }}
           >
             <div className="flex items-baseline justify-between">
               <p
                 className="text-[10px] tracking-[0.32em] uppercase"
-                style={{ color: e.rsvp ? COBALT : VEIN_TEXT, fontFamily: fontStack.body }}
+                style={{ color: e.rsvp ? BRASS : VEIN_TEXT, fontFamily: fontStack.body }}
               >
                 {e.date} · {e.time}
               </p>
               {e.rsvp && (
                 <p
                   className="text-[9px] tracking-[0.32em] uppercase"
-                  style={{ color: COBALT, fontFamily: fontStack.body }}
+                  style={{ color: BRASS, fontFamily: fontStack.body }}
                 >
                   Reserved
                 </p>
@@ -1769,7 +1769,7 @@ const RulesScreen = () => (
       Of conduct & comportment
     </p>
     <h1 className="text-4xl mt-2 leading-none" style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}>
-      The <em style={{ color: COBALT }}>house</em>
+      The <em style={{ color: BRASS }}>house</em>
     </h1>
 
     <Divider label="Five rules" />
@@ -1785,7 +1785,7 @@ const RulesScreen = () => (
         >
           <span
             className="text-3xl leading-none flex-shrink-0 w-10"
-            style={{ color: COBALT, fontFamily: fontStack.display, fontStyle: "italic" }}
+            style={{ color: BRASS, fontFamily: fontStack.display, fontStyle: "italic" }}
           >
             {r.n}
           </span>
@@ -1844,7 +1844,7 @@ const FlatTab = ({ tab, active, onClick }) => {
       aria-label={label}
       onClick={onClick}
       className="flex flex-col items-center gap-1 py-1 px-1 transition-all"
-      style={{ color: active ? COBALT : MARBLE + "55" }}
+      style={{ color: active ? BRASS : MARBLE + "55" }}
     >
       <Icon size={16} strokeWidth={active ? 2 : 1.5} />
       <span
@@ -1858,13 +1858,13 @@ const FlatTab = ({ tab, active, onClick }) => {
         initial={false}
         animate={{ opacity: active ? 1 : 0, scale: active ? 1 : 0 }}
         transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94] }}
-        style={{ background: COBALT }}
+        style={{ background: BRASS }}
       />
     </button>
   );
 };
 
-// Reserve gets the Venmo-style center treatment — larger icon, cobalt ring,
+// Reserve gets the Venmo-style center treatment — larger icon, brass ring,
 // lifted upward when active. No shared dot — the lift IS the active indicator.
 const CenterTab = ({ tab, active, onClick }) => {
   const { id, label, Icon } = tab;
@@ -1887,13 +1887,13 @@ const CenterTab = ({ tab, active, onClick }) => {
           width: 52,
           height: 52,
           background: active
-            ? `linear-gradient(160deg, ${COBALT} 0%, ${COBALT_DEEP} 100%)`
+            ? `linear-gradient(160deg, ${BRASS} 0%, ${BRASS_DEEP} 100%)`
             : GRAPHITE_2,
-          border: `1px solid ${active ? COBALT : VEIN + "55"}`,
+          border: `1px solid ${active ? BRASS : VEIN + "55"}`,
           boxShadow: active
-            ? `0 12px 28px -10px ${COBALT}77, inset 0 1px 0 ${MARBLE}22`
-            : `0 4px 12px -4px ${COBALT}22, inset 0 1px 0 ${MARBLE}11`,
-          color: active ? MARBLE : COBALT,
+            ? `0 12px 28px -10px ${BRASS}77, inset 0 1px 0 ${MARBLE}22`
+            : `0 4px 12px -4px ${BRASS}22, inset 0 1px 0 ${MARBLE}11`,
+          color: active ? MARBLE : BRASS,
         }}
       >
         <Icon size={22} strokeWidth={active ? 2 : 1.6} />
@@ -1903,7 +1903,7 @@ const CenterTab = ({ tab, active, onClick }) => {
         style={{
           fontFamily: fontStack.body,
           fontWeight: active ? 500 : 300,
-          color: active ? COBALT : MARBLE + "66",
+          color: active ? BRASS : MARBLE + "66",
         }}
       >
         {label}
@@ -2006,13 +2006,13 @@ export default function ClubApp() {
 
   return (
     <div
-      // Desktop: cobalt-glow background + flex-center the phone-frame mockup.
+      // Desktop: brass-glow background + flex-center the phone-frame mockup.
       // Mobile / PWA standalone: outer wrapper just fills the viewport so the
       // inner div can go edge-to-edge under the real iOS status bar.
       className="min-h-screen w-full md:flex md:items-center md:justify-center md:p-4"
       style={{
         background: `
-          radial-gradient(ellipse 80% 50% at 50% 0%, ${COBALT}18 0%, transparent 50%),
+          radial-gradient(ellipse 80% 50% at 50% 0%, ${BRASS}18 0%, transparent 50%),
           radial-gradient(ellipse at bottom, ${GRAPHITE_2} 0%, ${CHARCOAL} 60%, #000 100%)
         `,
         fontFamily: fontStack.body,
@@ -2034,8 +2034,8 @@ export default function ClubApp() {
           style={{
             boxShadow: `
               0 0 0 2px ${VEIN}44,
-              0 40px 80px -20px ${COBALT}22,
-              0 0 100px -20px ${COBALT}11
+              0 40px 80px -20px ${BRASS}22,
+              0 0 100px -20px ${BRASS}11
             `,
             border: `1px solid ${VEIN}66`,
           }}
@@ -2084,11 +2084,11 @@ export default function ClubApp() {
             </div>
             <button
               className="relative"
-              style={{ color: COBALT }}
+              style={{ color: BRASS }}
               aria-label="Notifications, 1 unread"
             >
               <Bell size={18} />
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full" style={{ background: COBALT }} />
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full" style={{ background: BRASS }} />
             </button>
           </div>
 
@@ -2145,15 +2145,15 @@ export default function ClubApp() {
                 style={{
                   bottom: "calc(env(safe-area-inset-bottom, 0px) + 110px)",
                   background: GRAPHITE_2,
-                  border: `1px solid ${COBALT}`,
+                  border: `1px solid ${BRASS}`,
                   color: MARBLE,
                   fontFamily: fontStack.body,
                   fontSize: 12,
                   letterSpacing: "0.1em",
-                  boxShadow: `0 20px 40px -10px ${COBALT}33`,
+                  boxShadow: `0 20px 40px -10px ${BRASS}33`,
                 }}
               >
-                <span style={{ color: COBALT, marginRight: 8 }}>✦</span>
+                <span style={{ color: BRASS, marginRight: 8 }}>✦</span>
                 {toast}
               </motion.div>
             )}
