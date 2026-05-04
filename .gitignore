@@ -22,9 +22,15 @@
 # pitch materials (repo is public — keep strategic / pricing docs out)
 /docs/pitch/
 
-# PassKit signing certs and generated passes (contain identity data)
+# PassKit signing certs (NEVER commit — anyone with these can sign passes as us)
 /scripts/pass-cert/
+
+# Generated wallet passes — gitignored by default, with one exception below.
 /public/passes/*.pkpass
+# Demo founders pass IS committed so Vercel can serve it without rebuild
+# infrastructure. Acceptable for the pitch demo (the pass identifies the
+# pitch target, Tilman). For production, replace with a per-member API.
+!/public/passes/founders.pkpass
 
 # debug
 npm-debug.log*

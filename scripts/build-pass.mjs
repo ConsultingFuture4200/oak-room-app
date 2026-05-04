@@ -5,8 +5,8 @@
 //   - scripts/pass-cert/passkey.pem   (your private key)
 //   - scripts/pass-cert/passcert.pem  (Apple-issued Pass Type cert, PEM)
 //   - scripts/pass-cert/wwdr.pem      (Apple WWDR intermediate cert, PEM)
-//   - scripts/pass-template/pass.json with real teamIdentifier
-//   - scripts/pass-template/icon.png + icon@2x.png + icon@3x.png
+//   - scripts/pass-template.pass/pass.json with real teamIdentifier
+//   - scripts/pass-template.pass/icon.png + icon@2x.png + icon@3x.png
 //
 // Usage:
 //   node scripts/build-pass.mjs                 # builds Tilman's pass
@@ -22,7 +22,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 
 const CERT_DIR = path.join(ROOT, "scripts/pass-cert");
-const TEMPLATE_DIR = path.join(ROOT, "scripts/pass-template");
+const TEMPLATE_DIR = path.join(ROOT, "scripts/pass-template.pass");
 const OUT_DIR = path.join(ROOT, "public/passes");
 
 const required = [
