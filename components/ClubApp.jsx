@@ -967,33 +967,28 @@ const MembershipScreen = ({ guests = [] }) => (
         ))}
       </svg>
 
-      {/* Oak tree silhouette */}
+      {/* Oak tree silhouette — real canopy from The Post Oak Hotel logo,
+          composited over Builder's trunk + root flare. The canopy renders
+          via SVG <image> so it still respects the parent transform/clip,
+          while the trunk stays as a vector path for crisp scaling. */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
         viewBox="0 0 400 252"
         preserveAspectRatio="xMidYMid meet"
       >
-        <g fill="#1a1a1a" opacity="0.42">
-          {/* Trunk */}
+        {/* Trunk + root flare (back layer, behind canopy) */}
+        <g fill="#1a1a1a" opacity="0.55">
           <path d="M188,252 L188,148 Q194,140 200,142 Q206,140 212,148 L212,252 Z"/>
-          {/* Root flare */}
           <ellipse cx="200" cy="250" rx="26" ry="6"/>
-          {/* Main canopy — overlapping organic clusters */}
-          <ellipse cx="200" cy="82"  rx="88"  ry="72"/>
-          <ellipse cx="115" cy="105" rx="68"  ry="52"/>
-          <ellipse cx="285" cy="100" rx="72"  ry="56"/>
-          <ellipse cx="160" cy="50"  rx="58"  ry="46"/>
-          <ellipse cx="242" cy="46"  rx="62"  ry="48"/>
-          <ellipse cx="72"  cy="128" rx="52"  ry="40"/>
-          <ellipse cx="328" cy="120" rx="55"  ry="43"/>
-          <ellipse cx="200" cy="36"  rx="48"  ry="40"/>
-          <ellipse cx="345" cy="148" rx="42"  ry="33"/>
-          <ellipse cx="55"  cy="148" rx="44"  ry="34"/>
-          <ellipse cx="130" cy="142" rx="42"  ry="30"/>
-          <ellipse cx="270" cy="138" rx="44"  ry="32"/>
-          <ellipse cx="20"  cy="152" rx="30"  ry="24"/>
-          <ellipse cx="380" cy="145" rx="28"  ry="22"/>
         </g>
+        {/* Real Post Oak canopy on top */}
+        <image
+          href="/oak-canopy.png"
+          x="0" y="-5"
+          width="400" height="160"
+          preserveAspectRatio="xMidYMin meet"
+          opacity="0.7"
+        />
       </svg>
 
       {/* Branding box — centered, matching physical card */}
