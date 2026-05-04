@@ -1289,11 +1289,85 @@ const GuestSlot = ({ slot, index, onChange, onRemove, removable }) => {
   );
 };
 
+const SmsPassMockup = ({ guestName, event, totalCount }) => {
+  const firstName = (guestName || "").trim().split(" ")[0] || "Friend";
+  const others = totalCount > 1 ? ` (+${totalCount - 1} more)` : "";
+  return (
+    <div className="px-6 pt-4">
+      <p
+        className="text-[9px] tracking-[0.4em] uppercase mb-3 text-center"
+        style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}
+      >
+        Sent to {firstName}'s phone{others}
+      </p>
+      <motion.div
+        initial={{ opacity: 0, y: 12, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ type: "spring", stiffness: 280, damping: 24 }}
+        className="mx-auto"
+        style={{ maxWidth: 320 }}
+      >
+        <div
+          className="px-4 py-3"
+          style={{
+            background: GRAPHITE_2,
+            border: `1px solid ${VEIN}33`,
+            borderRadius: 18,
+            borderTopLeftRadius: 4,
+          }}
+        >
+          <p
+            className="text-[9px] tracking-[0.32em] uppercase mb-2"
+            style={{ color: COBALT, fontFamily: fontStack.body }}
+          >
+            The Oak Room
+          </p>
+          <p
+            className="text-[13px] leading-snug"
+            style={{ color: MARBLE, fontFamily: fontStack.body }}
+          >
+            {firstName} — you're on the list for{" "}
+            <em style={{ fontFamily: fontStack.display, color: MARBLE }}>
+              {event.title}
+            </em>
+            , {event.date.toLowerCase()} at {event.time}. The Post Oak Hotel ·
+            walk in, tap your pass.
+          </p>
+          <div
+            className="flex items-center gap-2 mt-3 px-3 py-2"
+            style={{
+              background: COBALT + "22",
+              border: `1px solid ${COBALT}55`,
+              borderRadius: 10,
+            }}
+          >
+            <Wallet size={14} style={{ color: COBALT }} />
+            <p
+              className="text-[11px] tracking-[0.18em] uppercase"
+              style={{ color: COBALT, fontFamily: fontStack.body }}
+            >
+              Add to Apple Wallet
+            </p>
+          </div>
+        </div>
+      </motion.div>
+      <p
+        className="text-[9px] tracking-[0.32em] uppercase text-center mt-4"
+        style={{ color: TEXT_DIM, fontFamily: fontStack.body }}
+      >
+        Their pass goes straight into Wallet. The doorman sees it on tap.
+      </p>
+    </div>
+  );
+};
+
 const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
   if (!event) return null;
 
-  const filledCount = state.slots.filter(slotIsFilled).length;
+  const filledSlots = state.slots.filter(slotIsFilled);
+  const filledCount = filledSlots.length;
   const canSubmit = filledCount > 0 && state.status === "idle";
+  const sent = state.status === "sent";
 
   const handleSubmit = () => {
     if (!canSubmit) return;
@@ -1303,7 +1377,8 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
       const filled = state.slots.filter(slotIsFilled);
       onSubmit(event, filled);
       dispatch({ type: "SUBMIT_DONE" });
-      setTimeout(() => dispatch({ type: "CLOSE" }), 800);
+      // Hold the SMS preview long enough to read, then dismiss.
+      setTimeout(() => dispatch({ type: "CLOSE" }), 2400);
     }, 500);
   };
 
@@ -1358,76 +1433,84 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
               </p>
             </div>
 
-            <div className="px-6 mt-4">
-              <p
-                className="text-[10px] tracking-[0.4em] uppercase mb-3"
-                style={{ color: COBALT, fontFamily: fontStack.body }}
-              >
-                Your guests
-              </p>
-              <p
-                className="text-[11px] mb-3"
-                style={{ color: TEXT_DIM, fontFamily: fontStack.body }}
-              >
-                Three complimentary slots are yours by tier. Beyond that, the GM
-                approves at his discretion.
-              </p>
+            {sent ? (
+              <SmsPassMockup
+                guestName={filledSlots[0]?.name}
+                event={event}
+                totalCount={filledCount}
+              />
+            ) : (
+              <>
+                <div className="px-6 mt-4">
+                  <p
+                    className="text-[10px] tracking-[0.4em] uppercase mb-3"
+                    style={{ color: COBALT, fontFamily: fontStack.body }}
+                  >
+                    Your guests
+                  </p>
+                  <p
+                    className="text-[11px] mb-3"
+                    style={{ color: TEXT_DIM, fontFamily: fontStack.body }}
+                  >
+                    Three complimentary slots are yours by tier. Beyond that, the GM
+                    approves at his discretion.
+                  </p>
 
-              <div className="space-y-3">
-                {state.slots.map((sl, i) => (
-                  <GuestSlot
-                    key={sl.id}
-                    slot={sl}
-                    index={i}
-                    removable={i >= FREE_SLOTS_PER_RESERVATION}
-                    onChange={(field, value) =>
-                      dispatch({ type: "UPDATE", id: sl.id, field, value })
-                    }
-                    onRemove={() => dispatch({ type: "REMOVE", id: sl.id })}
-                  />
-                ))}
-              </div>
+                  <div className="space-y-3">
+                    {state.slots.map((sl, i) => (
+                      <GuestSlot
+                        key={sl.id}
+                        slot={sl}
+                        index={i}
+                        removable={i >= FREE_SLOTS_PER_RESERVATION}
+                        onChange={(field, value) =>
+                          dispatch({ type: "UPDATE", id: sl.id, field, value })
+                        }
+                        onRemove={() => dispatch({ type: "REMOVE", id: sl.id })}
+                      />
+                    ))}
+                  </div>
 
-              <button
-                onClick={() => dispatch({ type: "ADD_PENDING" })}
-                className="mt-3 w-full py-2 text-[10px] tracking-[0.32em] uppercase"
-                style={{
-                  color: VEIN_TEXT,
-                  border: `1px dashed ${VEIN}66`,
-                  fontFamily: fontStack.body,
-                  background: "transparent",
-                }}
-              >
-                + Add another guest (pending approval)
-              </button>
-            </div>
+                  <button
+                    onClick={() => dispatch({ type: "ADD_PENDING" })}
+                    className="mt-3 w-full py-2 text-[10px] tracking-[0.32em] uppercase"
+                    style={{
+                      color: VEIN_TEXT,
+                      border: `1px dashed ${VEIN}66`,
+                      fontFamily: fontStack.body,
+                      background: "transparent",
+                    }}
+                  >
+                    + Add another guest (pending approval)
+                  </button>
+                </div>
 
-            <div className="px-6 mt-5">
-              <button
-                onClick={handleSubmit}
-                disabled={!canSubmit}
-                className="w-full py-3 text-[11px] tracking-[0.32em] uppercase transition-opacity"
-                style={{
-                  color: GRAPHITE,
-                  background: `linear-gradient(180deg, ${COBALT} 0%, ${COBALT_DEEP} 100%)`,
-                  fontFamily: fontStack.body,
-                  opacity: canSubmit ? 1 : 0.4,
-                  boxShadow: `0 1px 0 ${COBALT}88 inset, 0 12px 30px -16px ${COBALT}88`,
-                }}
-              >
-                {state.status === "sent"
-                  ? "Sent ✓"
-                  : state.status === "sending"
-                  ? "Sending…"
-                  : `Send ${filledCount} invitation${filledCount === 1 ? "" : "s"}`}
-              </button>
-              <p
-                className="text-[9px] tracking-[0.3em] uppercase text-center mt-3"
-                style={{ color: TEXT_DIM, fontFamily: fontStack.body }}
-              >
-                Each guest receives an SMS with a one-tap pass.
-              </p>
-            </div>
+                <div className="px-6 mt-5">
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!canSubmit}
+                    className="w-full py-3 text-[11px] tracking-[0.32em] uppercase transition-opacity"
+                    style={{
+                      color: GRAPHITE,
+                      background: `linear-gradient(180deg, ${COBALT} 0%, ${COBALT_DEEP} 100%)`,
+                      fontFamily: fontStack.body,
+                      opacity: canSubmit ? 1 : 0.4,
+                      boxShadow: `0 1px 0 ${COBALT}88 inset, 0 12px 30px -16px ${COBALT}88`,
+                    }}
+                  >
+                    {state.status === "sending"
+                      ? "Sending…"
+                      : `Send ${filledCount} invitation${filledCount === 1 ? "" : "s"}`}
+                  </button>
+                  <p
+                    className="text-[9px] tracking-[0.3em] uppercase text-center mt-3"
+                    style={{ color: TEXT_DIM, fontFamily: fontStack.body }}
+                  >
+                    Each guest receives an SMS with a one-tap pass.
+                  </p>
+                </div>
+              </>
+            )}
           </motion.div>
         </>
       )}
