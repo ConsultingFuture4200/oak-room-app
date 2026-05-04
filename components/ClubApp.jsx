@@ -780,31 +780,16 @@ const WalletPassFace = () => (
       ))}
     </svg>
 
-    {/* Oak silhouette — large, engraved, dominant. Builder's coords scaled to portrait. */}
-    <svg
-      className="absolute pointer-events-none"
-      style={{ top: "0%", left: "0%", width: "100%", height: "70%" }}
-      viewBox="0 0 400 252"
-      preserveAspectRatio="xMidYMid meet"
+    {/* Oak canopy — the real silhouette extracted from The Post Oak Hotel
+        logo. Anchored across the upper portion so the framed wordmark sits
+        within the canopy (matches the physical card composition). */}
+    <img
+      src="/oak-canopy.png"
+      alt=""
       aria-hidden="true"
-    >
-      <g fill={ENGRAVED} opacity="0.42">
-        <path d="M188,252 L188,148 Q194,140 200,142 Q206,140 212,148 L212,252 Z" />
-        <ellipse cx="200" cy="250" rx="26" ry="6" />
-        <ellipse cx="200" cy="82" rx="88" ry="72" />
-        <ellipse cx="115" cy="105" rx="68" ry="52" />
-        <ellipse cx="285" cy="100" rx="72" ry="56" />
-        <ellipse cx="160" cy="50" rx="58" ry="46" />
-        <ellipse cx="242" cy="46" rx="62" ry="48" />
-        <ellipse cx="72" cy="128" rx="52" ry="40" />
-        <ellipse cx="328" cy="120" rx="55" ry="43" />
-        <ellipse cx="200" cy="36" rx="48" ry="40" />
-        <ellipse cx="345" cy="148" rx="42" ry="33" />
-        <ellipse cx="55" cy="148" rx="44" ry="34" />
-        <ellipse cx="130" cy="142" rx="42" ry="30" />
-        <ellipse cx="270" cy="138" rx="44" ry="32" />
-      </g>
-    </svg>
+      className="absolute pointer-events-none"
+      style={{ top: "10%", left: "3%", width: "94%", opacity: 0.6 }}
+    />
 
     {/* NFC waves — top right */}
     <svg
