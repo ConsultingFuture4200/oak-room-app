@@ -1774,7 +1774,6 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
   const [guestCount, setGuestCount] = useState(1);
   const [guestName, setGuestName] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
-  const needsApproval = guestCount > 3;
 
   return (
     <div className="px-6 pt-3 pb-32">
@@ -1810,10 +1809,9 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
             {!guestOpen && guestCount > 0 && (
               <span
                 className="text-[10px] tracking-[0.2em] uppercase"
-                style={{ color: needsApproval ? "#c0845a" : BRASS, fontFamily: fontStack.body }}
+                style={{ color: BRASS, fontFamily: fontStack.body }}
               >
                 {guestCount} {guestCount === 1 ? "guest" : "guests"}
-                {needsApproval ? " · approval needed" : ""}
               </span>
             )}
             <motion.span
@@ -1913,32 +1911,13 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
                   />
                 </div>
 
-                {/* Status */}
-                <AnimatePresence mode="wait">
-                  {needsApproval ? (
-                    <motion.p
-                      key="approval"
-                      initial={{ opacity: 0, y: 4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      className="text-[11px] leading-relaxed"
-                      style={{ color: "#c0845a", fontFamily: fontStack.body }}
-                    >
-                      Parties of 4 or more require advance approval. Contact the club to confirm availability.
-                    </motion.p>
-                  ) : (
-                    <motion.p
-                      key="included"
-                      initial={{ opacity: 0, y: 4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      className="text-[11px] leading-relaxed"
-                      style={{ color: TEXT_DIM, fontFamily: fontStack.body }}
-                    >
-                      Up to 3 guests included with your membership. Select an event below to complete your reservation.
-                    </motion.p>
-                  )}
-                </AnimatePresence>
+                {/* Note */}
+                <p
+                  className="text-[11px] leading-relaxed"
+                  style={{ color: TEXT_DIM, fontFamily: fontStack.body }}
+                >
+                  Up to 3 guests are included with your membership. The club will follow up to confirm your request.
+                </p>
               </div>
             </motion.div>
           )}
