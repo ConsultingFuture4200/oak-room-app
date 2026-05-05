@@ -1934,8 +1934,25 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
   const [tableOpen, setTableOpen] = useState(false);
   const [tableType, setTableType] = useState(null);
   const [tableSubmitted, setTableSubmitted] = useState(false);
+  const [tableGuestCount, setTableGuestCount] = useState(1);
+  const [tableGuestFields, setTableGuestFields] = useState([{ name: "", phone: "" }]);
+
+  const updateTableCount = (next) => {
+    const n = Math.max(1, next);
+    setTableGuestCount(n);
+    setTableGuestFields((prev) => {
+      const arr = [...prev];
+      while (arr.length < n) arr.push({ name: "", phone: "" });
+      return arr.slice(0, n);
+    });
+  };
+
+  const updateTableField = (i, key, val) => {
+    setTableGuestFields((prev) => prev.map((g, idx) => idx === i ? { ...g, [key]: val } : g));
+  };
 
   const TABLE_TYPES = ["Table", "Window View", "Bar"];
+  const canSubmitTable = !!tableType;
 
   return (
     <div className="px-6 pt-3 pb-32">
@@ -2157,6 +2174,56 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
                   </div>
                 </div>
 
+                {/* Guest count + fields */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+                      Party size
+                    </span>
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => updateTableCount(tableGuestCount - 1)}
+                        className="w-7 h-7 flex items-center justify-center"
+                        style={{ border: `1px solid ${VEIN}44`, color: MARBLE }}
+                      >–</button>
+                      <span className="text-lg w-4 text-center" style={{ color: MARBLE, fontFamily: fontStack.display, fontWeight: 400 }}>
+                        {tableGuestCount}
+                      </span>
+                      <button
+                        onClick={() => updateTableCount(tableGuestCount + 1)}
+                        className="w-7 h-7 flex items-center justify-center"
+                        style={{ border: `1px solid ${VEIN}44`, color: MARBLE }}
+                      >+</button>
+                    </div>
+                  </div>
+
+                  {tableGuestFields.map((g, i) => (
+                    <div key={i} className="space-y-2">
+                      {tableGuestCount > 1 && (
+                        <p className="text-[10px] tracking-[0.3em] uppercase" style={{ color: BRASS, fontFamily: fontStack.body }}>
+                          Guest {i + 1}
+                        </p>
+                      )}
+                      <input
+                        type="text"
+                        value={g.name}
+                        onChange={(e) => updateTableField(i, "name", e.target.value)}
+                        placeholder="Full name"
+                        className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                        style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
+                      />
+                      <input
+                        type="tel"
+                        value={g.phone}
+                        onChange={(e) => updateTableField(i, "phone", e.target.value)}
+                        placeholder="(000) 000-0000"
+                        className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                        style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
+                      />
+                    </div>
+                  ))}
+                </div>
+
                 {/* Submit */}
                 <AnimatePresence mode="wait">
                   {tableSubmitted ? (
@@ -2173,14 +2240,14 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
                   ) : (
                     <motion.button
                       key="btn"
-                      onClick={() => { if (tableType) { setTableSubmitted(true); setTableOpen(false); } }}
+                      onClick={() => { if (canSubmitTable) { setTableSubmitted(true); setTableOpen(false); } }}
                       className="w-full py-2.5 text-[11px] tracking-[0.3em] uppercase"
                       style={{
-                        background: tableType ? BRASS : "transparent",
-                        color: tableType ? "#1a1a1a" : VEIN_TEXT,
-                        border: `1px solid ${tableType ? BRASS : VEIN + "33"}`,
+                        background: canSubmitTable ? BRASS : "transparent",
+                        color: canSubmitTable ? "#1a1a1a" : VEIN_TEXT,
+                        border: `1px solid ${canSubmitTable ? BRASS : VEIN + "33"}`,
                         fontFamily: fontStack.body,
-                        opacity: tableType ? 1 : 0.5,
+                        opacity: canSubmitTable ? 1 : 0.5,
                       }}
                     >
                       Request table
