@@ -1002,7 +1002,15 @@ const LedgerCard = () => {
   const [target, setTarget] = useState(STARTING_BALANCE);
   const [settling, setSettling] = useState(false);
   const [settled, setSettled] = useState(false);
+  const [billOpen, setBillOpen] = useState(false);
+  const [billEmail, setBillEmail] = useState("");
+  const [billSent, setBillSent] = useState(false);
   const live = useCountTo(target, 1100);
+
+  const handleBillSend = () => {
+    if (!billEmail.trim()) return;
+    setBillSent(true);
+  };
 
   const handleSettle = () => {
     if (settling || settled) return;
@@ -1159,98 +1167,73 @@ const LedgerCard = () => {
           )}
         </AnimatePresence>
       </div>
-    </motion.div>
-  );
-};
 
-const BillRequest = () => {
-  const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
-
-  const handleSend = () => {
-    if (!email.trim()) return;
-    setSent(true);
-  };
-
-  return (
-    <div className="mt-6" style={{ border: `1px solid ${VEIN}33`, background: GRAPHITE_2 }}>
-      <button
-        onClick={() => { setOpen((o) => !o); setSent(false); }}
-        className="w-full flex items-center justify-between px-4 py-3"
-      >
-        <div className="flex items-center gap-2">
-          <Send size={13} style={{ color: BRASS }} />
-          <span className="text-[11px] tracking-[0.25em] uppercase" style={{ color: MARBLE, fontFamily: fontStack.body }}>
-            Request itemized bill
-          </span>
-        </div>
-        <motion.span
-          animate={{ rotate: open ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-          style={{ color: VEIN_TEXT, display: "inline-block", lineHeight: 1 }}
+      {/* Bill request — inline, bottom of card */}
+      <div className="relative mt-5 pt-4" style={{ borderTop: `1px solid ${VEIN}22` }}>
+        <button
+          onClick={() => { setBillOpen((o) => !o); setBillSent(false); }}
+          className="w-full flex items-center justify-between"
         >
-          ▾
-        </motion.span>
-      </button>
+          <div className="flex items-center gap-2">
+            <Send size={12} style={{ color: billSent ? BRASS : VEIN_TEXT }} />
+            <span
+              className="text-[10px] tracking-[0.3em] uppercase"
+              style={{ color: billSent ? BRASS : VEIN_TEXT, fontFamily: fontStack.body }}
+            >
+              {billSent ? "Statement requested" : "Request for expenses"}
+            </span>
+          </div>
+          {!billSent && (
+            <motion.span
+              animate={{ rotate: billOpen ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              style={{ color: VEIN_TEXT, display: "inline-block", lineHeight: 1, fontSize: 12 }}
+            >
+              ▾
+            </motion.span>
+          )}
+        </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22 }}
-            style={{ overflow: "hidden", borderTop: `1px solid ${VEIN}22` }}
-          >
-            <div className="px-4 py-4 space-y-3">
-              {!sent ? (
-                <>
-                  <p className="text-[11px] leading-relaxed" style={{ color: TEXT_DIM, fontFamily: fontStack.body }}>
-                    We'll send an itemized statement to the address below — ready for expense reporting.
-                  </p>
-                  <div className="space-y-1">
-                    <label className="text-[10px] tracking-[0.25em] uppercase block" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-                      Email address
-                    </label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
-                      style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
-                    />
-                  </div>
-                  <button
-                    onClick={handleSend}
-                    className="w-full py-2.5 text-[11px] tracking-[0.3em] uppercase transition-opacity"
-                    style={{
-                      background: email.trim() ? BRASS : GRAPHITE_2,
-                      color: email.trim() ? "#1a1a1a" : VEIN_TEXT,
-                      border: `1px solid ${email.trim() ? BRASS : VEIN + "33"}`,
-                      fontFamily: fontStack.body,
-                      opacity: email.trim() ? 1 : 0.6,
-                    }}
-                  >
-                    Send statement
-                  </button>
-                </>
-              ) : (
-                <motion.p
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-[11px] tracking-[0.2em] uppercase text-center py-2"
-                  style={{ color: BRASS, fontFamily: fontStack.body }}
+        <AnimatePresence>
+          {billOpen && !billSent && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22 }}
+              style={{ overflow: "hidden" }}
+            >
+              <div className="pt-3 space-y-2.5">
+                <p className="text-[11px] leading-relaxed text-left" style={{ color: TEXT_DIM, fontFamily: fontStack.body }}>
+                  We'll email an itemized statement — ready for expense reporting.
+                </p>
+                <input
+                  type="email"
+                  value={billEmail}
+                  onChange={(e) => setBillEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                  style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
+                />
+                <button
+                  onClick={handleBillSend}
+                  className="w-full py-2 text-[11px] tracking-[0.3em] uppercase"
+                  style={{
+                    background: billEmail.trim() ? BRASS : "transparent",
+                    color: billEmail.trim() ? "#1a1a1a" : VEIN_TEXT,
+                    border: `1px solid ${billEmail.trim() ? BRASS : VEIN + "33"}`,
+                    fontFamily: fontStack.body,
+                    opacity: billEmail.trim() ? 1 : 0.55,
+                  }}
                 >
-                  Statement requested · check your inbox
-                </motion.p>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+                  Send statement
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
   );
 };
 
@@ -1462,8 +1445,6 @@ const MembershipScreen = ({ guests = [] }) => (
         </div>
       ))}
     </div>
-
-    <BillRequest />
 
     <div className="mt-10 pt-6 text-center" style={{ borderTop: `1px solid ${VEIN}22` }}>
       <p className="text-[10px] tracking-[0.6em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
