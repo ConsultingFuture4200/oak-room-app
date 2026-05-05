@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar,
@@ -2566,7 +2566,12 @@ const CenterTab = ({ tab, active, onClick }) => {
 };
 
 export default function ClubApp() {
+  const scrollRef = useRef(null);
   const [tab, setTab] = useState("foryou");
+
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, [tab]);
   const [events, setEvents] = useState(EVENTS);
   const [guests, setGuests] = useState(INITIAL_GUESTS);
   const [toast, setToast] = useState(null);
@@ -2748,7 +2753,7 @@ export default function ClubApp() {
           </div>
 
           {/* Body */}
-          <div className="flex-1 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
+          <div ref={scrollRef} className="flex-1 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={tab}
