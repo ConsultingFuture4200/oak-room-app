@@ -448,7 +448,7 @@ const HomeScreen = ({ events, onRSVP }) => {
             className="text-3xl leading-none mt-1"
             style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400, letterSpacing: "-0.01em" }}
           >
-            The book of <em style={{ color: BRASS }}>hours</em>
+            The book of <em style={{ color: BRASS }}>events</em>
           </h1>
         </div>
         <span className="text-[9px] tracking-[0.3em] uppercase pb-1" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
