@@ -227,7 +227,7 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
     setNote("");
   };
 
-  const chips = ["Reserve the Saloon", "Add a guest tonight", "Recommend a wine"];
+  const chips = ["Book a hotel room", "Add a guest tonight", "Recommend a wine"];
 
   return (
     <div className="px-5 pt-3 pb-32">
