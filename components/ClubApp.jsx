@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar,
@@ -391,7 +391,7 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
         ].map((item, i) => (
           <motion.button
             key={i}
-            onClick={onQuickBook}
+            onClick={() => onQuickBook(item)}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06 }}
@@ -479,10 +479,7 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
   );
 };
 
-const HomeScreen = ({ events, onRSVP }) => {
-  const [expandedId, setExpandedId] = useState(null);
-  const expanded = events.find((e) => e.id === expandedId);
-
+const HomeScreen = ({ events, onOpenReserve }) => {
   return (
     <div className="px-5 pt-3 pb-6">
       {/* Header */}
@@ -508,7 +505,7 @@ const HomeScreen = ({ events, onRSVP }) => {
         {events.map((e, i) => (
           <motion.button
             key={e.id}
-            onClick={() => setExpandedId(e.id)}
+            onClick={() => onOpenReserve(e.id)}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 * Math.min(i, 5), duration: 0.4 }}
@@ -580,9 +577,9 @@ const HomeScreen = ({ events, onRSVP }) => {
         ))}
       </div>
 
-      {/* Expanded overlay — fixed to viewport so it stays put while page can't scroll behind */}
+      {/* Expanded overlay removed — ReserveDetailSheet handles this now */}
       <AnimatePresence>
-        {expanded && (
+        {false && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -1783,7 +1780,7 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
 
   const filledSlots = state.slots.filter(slotIsFilled);
   const filledCount = filledSlots.length;
-  const canSubmit = filledCount > 0 && state.status === "idle";
+  const canSubmit = state.status === "idle";
   const sent = state.status === "sent";
 
   const handleSubmit = () => {
@@ -1934,13 +1931,17 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
                   >
                     {state.status === "sending"
                       ? "Sending…"
+                      : filledCount === 0
+                      ? "Hold my seat"
                       : `Send ${filledCount} invitation${filledCount === 1 ? "" : "s"}`}
                   </button>
                   <p
                     className="text-[9px] tracking-[0.3em] uppercase text-center mt-3"
                     style={{ color: TEXT_DIM, fontFamily: fontStack.body }}
                   >
-                    Each guest receives an SMS with a one-tap pass.
+                    {filledCount === 0
+                      ? "Your spot is confirmed. Add guests anytime."
+                      : "Each guest receives an SMS with a one-tap pass."}
                   </p>
                 </div>
               </>
@@ -1952,10 +1953,18 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
   );
 };
 
-const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
+const ReserveScreen = ({ events, onSubmit, state, dispatch, guestPanelTrigger }) => {
   const event = events.find((e) => e.id === state.eventId);
 
   const [guestOpen, setGuestOpen] = useState(false);
+
+  useEffect(() => {
+    if (guestPanelTrigger > 0) {
+      setGuestOpen(true);
+      setGuestSubmitted(false);
+    }
+  }, [guestPanelTrigger]);
+  const [guestDate, setGuestDate] = useState("");
   const [guestCount, setGuestCount] = useState(1);
   const [guestFields, setGuestFields] = useState([{ name: "", phone: "" }]);
   const [guestSubmitted, setGuestSubmitted] = useState(false);
@@ -1976,9 +1985,11 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
     setGuestSubmitted(false);
   };
 
-  const canSubmitGuests = guestFields.some((g) => g.name.trim());
+  const canSubmitGuests = !!guestDate && guestFields.some((g) => g.name.trim());
 
   const [tableOpen, setTableOpen] = useState(false);
+  const [tableDate, setTableDate] = useState("");
+  const [tableTime, setTableTime] = useState("");
   const [tableType, setTableType] = useState(null);
   const [tableSubmitted, setTableSubmitted] = useState(false);
   const [tableGuestCount, setTableGuestCount] = useState(1);
@@ -1999,7 +2010,7 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
   };
 
   const TABLE_TYPES = ["Table", "Window View", "Bar"];
-  const canSubmitTable = !!tableType;
+  const canSubmitTable = !!tableType && !!tableDate && !!tableTime;
 
   return (
     <div className="px-6 pt-3 pb-32">
@@ -2060,6 +2071,17 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
               style={{ overflow: "hidden", borderTop: `1px solid ${VEIN}22` }}
             >
               <div className="px-4 py-4 space-y-4">
+                {/* Date */}
+                <div className="space-y-1">
+                  <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>Date</p>
+                  <input
+                    type="date"
+                    value={guestDate}
+                    onChange={(e) => { setGuestDate(e.target.value); setGuestSubmitted(false); }}
+                    className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                    style={{ border: `1px solid ${VEIN}44`, color: guestDate ? MARBLE : VEIN_TEXT, fontFamily: fontStack.body, colorScheme: "dark" }}
+                  />
+                </div>
                 {/* Counter */}
                 <div className="flex items-center justify-between">
                   <span className="text-[11px]" style={{ color: TEXT_DIM, fontFamily: fontStack.body }}>
@@ -2195,6 +2217,29 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
               style={{ overflow: "hidden", borderTop: `1px solid ${VEIN}22` }}
             >
               <div className="px-4 py-4 space-y-4">
+                {/* Date + Time */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>Date</p>
+                    <input
+                      type="date"
+                      value={tableDate}
+                      onChange={(e) => { setTableDate(e.target.value); setTableSubmitted(false); }}
+                      className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                      style={{ border: `1px solid ${VEIN}44`, color: tableDate ? MARBLE : VEIN_TEXT, fontFamily: fontStack.body, colorScheme: "dark" }}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>Time</p>
+                    <input
+                      type="time"
+                      value={tableTime}
+                      onChange={(e) => { setTableTime(e.target.value); setTableSubmitted(false); }}
+                      className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                      style={{ border: `1px solid ${VEIN}44`, color: tableTime ? MARBLE : VEIN_TEXT, fontFamily: fontStack.body, colorScheme: "dark" }}
+                    />
+                  </div>
+                </div>
                 {/* Table type selector */}
                 <div className="space-y-2">
                   <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
@@ -2521,10 +2566,16 @@ const CenterTab = ({ tab, active, onClick }) => {
 };
 
 export default function ClubApp() {
+  const scrollRef = useRef(null);
   const [tab, setTab] = useState("foryou");
+
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, [tab]);
   const [events, setEvents] = useState(EVENTS);
   const [guests, setGuests] = useState(INITIAL_GUESTS);
   const [toast, setToast] = useState(null);
+  const [guestPanelTrigger, setGuestPanelTrigger] = useState(0);
   const [reserveState, reserveDispatch] = useReducer(
     reserveReducer,
     initialReserveState
@@ -2548,10 +2599,9 @@ export default function ClubApp() {
     }
     showToast("Note sent · concierge will reply by text");
   };
-  const handleQuickBook = () => {
-    const e = nextOpenEvent();
-    if (e) openReserveFor(e.id);
-    else showToast("No open events to hold");
+  const handleQuickBook = (item) => {
+    setTab("reserve");
+    setGuestPanelTrigger((n) => n + 1);
   };
 
   const showToast = (msg) => {
@@ -2606,7 +2656,9 @@ export default function ClubApp() {
     );
     const pendingN = slots.filter((s) => s.kind === "pending").length;
     showToast(
-      pendingN > 0
+      slots.length === 0
+        ? "Reserved · you're on the list"
+        : pendingN > 0
         ? `${slots.length} invitation${slots.length === 1 ? "" : "s"} sent · ${pendingN} pending GM`
         : `${slots.length} invitation${slots.length === 1 ? "" : "s"} sent`
     );
@@ -2701,7 +2753,7 @@ export default function ClubApp() {
           </div>
 
           {/* Body */}
-          <div className="flex-1 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
+          <div ref={scrollRef} className="flex-1 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={tab}
@@ -2718,7 +2770,7 @@ export default function ClubApp() {
                     onQuickBook={handleQuickBook}
                   />
                 )}
-                {tab === "home" && <HomeScreen events={events} onRSVP={handleRSVP} />}
+                {tab === "home" && <HomeScreen events={events} onOpenReserve={(id) => reserveDispatch({ type: "OPEN", eventId: id })} />}
                 {tab === "card" && <MembershipScreen guests={guests} />}
                 {tab === "reserve" && (
                   <ReserveScreen
@@ -2726,6 +2778,7 @@ export default function ClubApp() {
                     onSubmit={handleReserveSubmit}
                     state={reserveState}
                     dispatch={reserveDispatch}
+                    guestPanelTrigger={guestPanelTrigger}
                   />
                 )}
                 {tab === "rules" && <RulesScreen />}
