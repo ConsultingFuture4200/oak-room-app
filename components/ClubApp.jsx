@@ -271,6 +271,53 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
         </p>
       </motion.div>
 
+      {/* Upcoming reservations — only shown when at least one event is reserved */}
+      {events.some((e) => e.rsvp) && (
+        <>
+          <Divider label="Your upcoming" />
+          <div className="space-y-2.5">
+            {events.filter((e) => e.rsvp).map((e, i) => (
+              <motion.div
+                key={e.id}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 * i, duration: 0.4 }}
+                className="flex items-stretch gap-3 p-3"
+                style={{
+                  background: GRAPHITE_2,
+                  border: `1px solid ${BRASS}44`,
+                }}
+              >
+                {e.image && (
+                  <div
+                    className="flex-shrink-0 overflow-hidden"
+                    style={{ width: 56, height: 56, border: `1px solid ${BRASS}55` }}
+                  >
+                    <img src={e.image} alt="" aria-hidden className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-[9px] tracking-[0.35em] uppercase" style={{ color: BRASS, fontFamily: fontStack.body }}>
+                    {e.date} · {e.time}
+                  </p>
+                  <p className="text-sm mt-0.5 leading-tight" style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}>
+                    {e.title}
+                  </p>
+                </div>
+                <div className="flex items-center flex-shrink-0">
+                  <span
+                    className="text-[9px] tracking-[0.3em] uppercase px-2 py-1 flex items-center gap-1"
+                    style={{ color: BRASS, border: `1px solid ${BRASS}`, fontFamily: fontStack.body }}
+                  >
+                    <Check size={9} /> Held
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </>
+      )}
+
       <Divider label="Curated for you" />
 
       <div className="space-y-2.5">
