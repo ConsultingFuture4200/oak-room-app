@@ -1967,6 +1967,7 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch, guestPanelTrigger })
       setGuestSubmitted(false);
     }
   }, [guestPanelTrigger]);
+  const [guestDate, setGuestDate] = useState("");
   const [guestCount, setGuestCount] = useState(1);
   const [guestFields, setGuestFields] = useState([{ name: "", phone: "" }]);
   const [guestSubmitted, setGuestSubmitted] = useState(false);
@@ -1987,9 +1988,11 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch, guestPanelTrigger })
     setGuestSubmitted(false);
   };
 
-  const canSubmitGuests = guestFields.some((g) => g.name.trim());
+  const canSubmitGuests = !!guestDate && guestFields.some((g) => g.name.trim());
 
   const [tableOpen, setTableOpen] = useState(false);
+  const [tableDate, setTableDate] = useState("");
+  const [tableTime, setTableTime] = useState("");
   const [tableType, setTableType] = useState(null);
   const [tableSubmitted, setTableSubmitted] = useState(false);
   const [tableGuestCount, setTableGuestCount] = useState(1);
@@ -2010,7 +2013,7 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch, guestPanelTrigger })
   };
 
   const TABLE_TYPES = ["Table", "Window View", "Bar"];
-  const canSubmitTable = !!tableType;
+  const canSubmitTable = !!tableType && !!tableDate && !!tableTime;
 
   return (
     <div className="px-6 pt-3 pb-32">
@@ -2071,6 +2074,17 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch, guestPanelTrigger })
               style={{ overflow: "hidden", borderTop: `1px solid ${VEIN}22` }}
             >
               <div className="px-4 py-4 space-y-4">
+                {/* Date */}
+                <div className="space-y-1">
+                  <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>Date</p>
+                  <input
+                    type="date"
+                    value={guestDate}
+                    onChange={(e) => { setGuestDate(e.target.value); setGuestSubmitted(false); }}
+                    className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                    style={{ border: `1px solid ${VEIN}44`, color: guestDate ? MARBLE : VEIN_TEXT, fontFamily: fontStack.body, colorScheme: "dark" }}
+                  />
+                </div>
                 {/* Counter */}
                 <div className="flex items-center justify-between">
                   <span className="text-[11px]" style={{ color: TEXT_DIM, fontFamily: fontStack.body }}>
@@ -2206,6 +2220,29 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch, guestPanelTrigger })
               style={{ overflow: "hidden", borderTop: `1px solid ${VEIN}22` }}
             >
               <div className="px-4 py-4 space-y-4">
+                {/* Date + Time */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>Date</p>
+                    <input
+                      type="date"
+                      value={tableDate}
+                      onChange={(e) => { setTableDate(e.target.value); setTableSubmitted(false); }}
+                      className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                      style={{ border: `1px solid ${VEIN}44`, color: tableDate ? MARBLE : VEIN_TEXT, fontFamily: fontStack.body, colorScheme: "dark" }}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>Time</p>
+                    <input
+                      type="time"
+                      value={tableTime}
+                      onChange={(e) => { setTableTime(e.target.value); setTableSubmitted(false); }}
+                      className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                      style={{ border: `1px solid ${VEIN}44`, color: tableTime ? MARBLE : VEIN_TEXT, fontFamily: fontStack.body, colorScheme: "dark" }}
+                    />
+                  </div>
+                </div>
                 {/* Table type selector */}
                 <div className="space-y-2">
                   <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
