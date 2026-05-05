@@ -1463,9 +1463,6 @@ const MembershipScreen = ({ guests = [] }) => (
       <Wallet size={14} strokeWidth={1.6} />
       Add to Apple Wallet
     </a>
-    <p className="text-[10px] tracking-[0.3em] uppercase mt-2 text-center" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-      Replace the metal card · works at the door
-    </p>
 
     <Divider label="Your guests this month" />
 
@@ -2436,7 +2433,7 @@ export default function ClubApp() {
           <div className="flex items-center justify-between px-6 pt-4 pb-3 flex-shrink-0" style={{ borderBottom: `1px solid ${VEIN}22` }}>
             <div>
               <p className="text-[10px] tracking-[0.5em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-                Member · {MEMBER.tier}
+                Members
               </p>
               <p className="text-lg leading-none mt-1" style={{ fontFamily: fontStack.display, color: MARBLE, fontStyle: "italic" }}>
                 Oak Room Houston
