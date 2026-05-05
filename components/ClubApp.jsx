@@ -1783,7 +1783,7 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
 
   const filledSlots = state.slots.filter(slotIsFilled);
   const filledCount = filledSlots.length;
-  const canSubmit = filledCount > 0 && state.status === "idle";
+  const canSubmit = state.status === "idle";
   const sent = state.status === "sent";
 
   const handleSubmit = () => {
@@ -1934,13 +1934,17 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
                   >
                     {state.status === "sending"
                       ? "Sending…"
+                      : filledCount === 0
+                      ? "Hold my seat"
                       : `Send ${filledCount} invitation${filledCount === 1 ? "" : "s"}`}
                   </button>
                   <p
                     className="text-[9px] tracking-[0.3em] uppercase text-center mt-3"
                     style={{ color: TEXT_DIM, fontFamily: fontStack.body }}
                   >
-                    Each guest receives an SMS with a one-tap pass.
+                    {filledCount === 0
+                      ? "Your spot is confirmed. Add guests anytime."
+                      : "Each guest receives an SMS with a one-tap pass."}
                   </p>
                 </div>
               </>
@@ -2606,7 +2610,9 @@ export default function ClubApp() {
     );
     const pendingN = slots.filter((s) => s.kind === "pending").length;
     showToast(
-      pendingN > 0
+      slots.length === 0
+        ? "Reserved · you're on the list"
+        : pendingN > 0
         ? `${slots.length} invitation${slots.length === 1 ? "" : "s"} sent · ${pendingN} pending GM`
         : `${slots.length} invitation${slots.length === 1 ? "" : "s"} sent`
     );
