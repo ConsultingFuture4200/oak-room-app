@@ -1931,6 +1931,12 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
 
   const canSubmitGuests = guestFields.some((g) => g.name.trim());
 
+  const [tableOpen, setTableOpen] = useState(false);
+  const [tableType, setTableType] = useState(null);
+  const [tableSubmitted, setTableSubmitted] = useState(false);
+
+  const TABLE_TYPES = ["Table", "Window View", "Bar"];
+
   return (
     <div className="px-6 pt-3 pb-32">
       <p
@@ -2078,6 +2084,106 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
                       }}
                     >
                       Submit guest request
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Book a table panel */}
+      <div className="mt-3 mb-1" style={{ border: `1px solid ${VEIN}33`, background: GRAPHITE_2 }}>
+        <button
+          onClick={() => { setTableOpen((o) => !o); setTableSubmitted(false); }}
+          className="w-full flex items-center justify-between px-4 py-3"
+        >
+          <div className="flex items-center gap-2">
+            <Wine size={14} style={{ color: BRASS }} />
+            <span className="text-[11px] tracking-[0.25em] uppercase" style={{ color: MARBLE, fontFamily: fontStack.body }}>
+              Book a Table
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            {!tableOpen && (
+              <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: BRASS, fontFamily: fontStack.body }}>
+                {tableSubmitted ? "Request sent" : tableType ? tableType : ""}
+              </span>
+            )}
+            <motion.span
+              animate={{ rotate: tableOpen ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              style={{ color: VEIN_TEXT, display: "inline-block", lineHeight: 1 }}
+            >
+              ▾
+            </motion.span>
+          </div>
+        </button>
+
+        <AnimatePresence>
+          {tableOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22 }}
+              style={{ overflow: "hidden", borderTop: `1px solid ${VEIN}22` }}
+            >
+              <div className="px-4 py-4 space-y-4">
+                {/* Table type selector */}
+                <div className="space-y-2">
+                  <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+                    Seating preference
+                  </p>
+                  <div className="space-y-2">
+                    {TABLE_TYPES.map((t) => (
+                      <button
+                        key={t}
+                        onClick={() => { setTableType(t); setTableSubmitted(false); }}
+                        className="w-full text-left px-3 py-2.5 text-[13px] flex items-center justify-between"
+                        style={{
+                          border: `1px solid ${tableType === t ? BRASS : VEIN + "44"}`,
+                          background: tableType === t ? BRASS + "11" : "transparent",
+                          color: tableType === t ? BRASS : MARBLE,
+                          fontFamily: fontStack.display,
+                          fontWeight: 400,
+                        }}
+                      >
+                        {t}
+                        {tableType === t && <Check size={13} style={{ color: BRASS }} />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Submit */}
+                <AnimatePresence mode="wait">
+                  {tableSubmitted ? (
+                    <motion.p
+                      key="done"
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-[11px] tracking-[0.25em] uppercase text-center py-2"
+                      style={{ color: BRASS, fontFamily: fontStack.body }}
+                    >
+                      Request sent · the club will confirm
+                    </motion.p>
+                  ) : (
+                    <motion.button
+                      key="btn"
+                      onClick={() => { if (tableType) { setTableSubmitted(true); setTableOpen(false); } }}
+                      className="w-full py-2.5 text-[11px] tracking-[0.3em] uppercase"
+                      style={{
+                        background: tableType ? BRASS : "transparent",
+                        color: tableType ? "#1a1a1a" : VEIN_TEXT,
+                        border: `1px solid ${tableType ? BRASS : VEIN + "33"}`,
+                        fontFamily: fontStack.body,
+                        opacity: tableType ? 1 : 0.5,
+                      }}
+                    >
+                      Request table
                     </motion.button>
                   )}
                 </AnimatePresence>
