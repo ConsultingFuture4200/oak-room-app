@@ -337,35 +337,41 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
 
       <Divider label="Your usual" />
 
-      <motion.button
-        onClick={onQuickBook}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileTap={{ scale: 0.99 }}
-        className="w-full text-left p-4 flex items-center justify-between"
-        style={{
-          background: `linear-gradient(160deg, ${GRAPHITE_2} 0%, ${GRAPHITE} 100%)`,
-          border: `1px solid ${VEIN}33`,
-        }}
-      >
-        <div>
-          <p className="text-[9px] tracking-[0.4em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-            The pattern
-          </p>
-          <p
-            className="text-base mt-1"
-            style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}
+      <div className="space-y-3">
+        {[
+          { label: "The pattern", detail: "Bar Top · Friday · 7 PM · You +3" },
+          { label: "The pattern", detail: "Window View · Thursday · 8:30 PM · You +1" },
+        ].map((item, i) => (
+          <motion.button
+            key={i}
+            onClick={onQuickBook}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.06 }}
+            whileTap={{ scale: 0.99 }}
+            className="w-full text-left p-4 flex items-center justify-between"
+            style={{
+              background: `linear-gradient(160deg, ${GRAPHITE_2} 0%, ${GRAPHITE} 100%)`,
+              border: `1px solid ${VEIN}33`,
+            }}
           >
-            The Saloon · Friday · 7 PM · two
-          </p>
-        </div>
-        <span
-          className="text-[9px] tracking-[0.3em] uppercase px-2 py-1"
-          style={{ color: BRASS, border: `1px solid ${BRASS}`, fontFamily: fontStack.body }}
-        >
-          Hold it
-        </span>
-      </motion.button>
+            <div>
+              <p className="text-[9px] tracking-[0.4em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+                {item.label}
+              </p>
+              <p className="text-base mt-1" style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}>
+                {item.detail}
+              </p>
+            </div>
+            <span
+              className="text-[9px] tracking-[0.3em] uppercase px-2 py-1"
+              style={{ color: BRASS, border: `1px solid ${BRASS}`, fontFamily: fontStack.body }}
+            >
+              Hold it
+            </span>
+          </motion.button>
+        ))}
+      </div>
 
       <Divider label="Concierge" />
 
