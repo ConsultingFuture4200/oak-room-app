@@ -1237,6 +1237,104 @@ const LedgerCard = () => {
   );
 };
 
+const ExpenseLedger = () => {
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
+
+  const today = new Date().toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const handleSend = () => {
+    if (!email.trim()) return;
+    setSent(true);
+    setOpen(false);
+  };
+
+  return (
+    <div style={{ border: `1px solid ${VEIN}33` }}>
+      {/* Two-column row */}
+      <div className="grid grid-cols-2" style={{ borderBottom: open ? `1px solid ${VEIN}22` : "none" }}>
+        {/* Left — date */}
+        <div
+          className="px-4 py-4 flex flex-col justify-center"
+          style={{ borderRight: `1px solid ${VEIN}22` }}
+        >
+          <p className="text-[9px] tracking-[0.35em] uppercase mb-1" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+            Date
+          </p>
+          <p className="text-[13px]" style={{ color: MARBLE, fontFamily: fontStack.display, fontWeight: 400 }}>
+            {today}
+          </p>
+        </div>
+
+        {/* Right — request */}
+        <button
+          onClick={() => { setOpen((o) => !o); setSent(false); }}
+          className="px-4 py-4 text-left flex flex-col justify-center"
+          style={{ background: open ? GRAPHITE_2 : "transparent" }}
+        >
+          <p className="text-[9px] tracking-[0.35em] uppercase mb-1" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+            Expenses
+          </p>
+          {sent ? (
+            <p className="text-[13px]" style={{ color: BRASS, fontFamily: fontStack.display, fontStyle: "italic" }}>
+              Statement sent
+            </p>
+          ) : (
+            <p className="text-[13px]" style={{ color: MARBLE, fontFamily: fontStack.display, fontWeight: 400 }}>
+              Request items <span style={{ color: BRASS }}>→</span>
+            </p>
+          )}
+        </button>
+      </div>
+
+      {/* Expandable email form */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            style={{ overflow: "hidden" }}
+          >
+            <div className="px-4 py-4 space-y-3" style={{ background: GRAPHITE_2 }}>
+              <p className="text-[11px] leading-relaxed" style={{ color: TEXT_DIM, fontFamily: fontStack.body }}>
+                We'll email an itemized statement — ready for expense reporting.
+              </p>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
+              />
+              <button
+                onClick={handleSend}
+                className="w-full py-2 text-[11px] tracking-[0.3em] uppercase"
+                style={{
+                  background: email.trim() ? BRASS : "transparent",
+                  color: email.trim() ? "#1a1a1a" : VEIN_TEXT,
+                  border: `1px solid ${email.trim() ? BRASS : VEIN + "33"}`,
+                  fontFamily: fontStack.body,
+                  opacity: email.trim() ? 1 : 0.55,
+                }}
+              >
+                Send statement
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const MembershipScreen = ({ guests = [] }) => (
   <div className="px-6 pt-3 pb-32">
     <p className="text-[10px] tracking-[0.5em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
@@ -1354,24 +1452,6 @@ const MembershipScreen = ({ guests = [] }) => (
       Replace the metal card · works at the door
     </p>
 
-    <Divider label="Privileges" />
-
-    <div className="space-y-3">
-      {[
-        { k: "Guest allowance", v: "+4 per visit" },
-        { k: "Reservation window", v: "30 days advance" },
-      ].map((p, i) => (
-        <div key={i} className="flex justify-between items-baseline pb-2" style={{ borderBottom: `1px dashed ${VEIN}33` }}>
-          <span className="text-[11px] tracking-[0.2em] uppercase" style={{ color: MARBLE + "AA", fontFamily: fontStack.body }}>
-            {p.k}
-          </span>
-          <span className="text-sm" style={{ color: BRASS, fontFamily: fontStack.display, fontStyle: "italic" }}>
-            {p.v}
-          </span>
-        </div>
-      ))}
-    </div>
-
     <Divider label="Your guests this month" />
 
     {guests.length === 0 ? (
@@ -1412,9 +1492,9 @@ const MembershipScreen = ({ guests = [] }) => (
       </div>
     )}
 
-    <Divider label="The ledger · due May 31" />
+    <Divider label="The ledger" />
 
-    <LedgerCard />
+    <ExpenseLedger />
 
     <div className="mt-10 pt-6 text-center" style={{ borderTop: `1px solid ${VEIN}22` }}>
       <p className="text-[10px] tracking-[0.6em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
