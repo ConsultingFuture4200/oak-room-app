@@ -391,7 +391,7 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
         ].map((item, i) => (
           <motion.button
             key={i}
-            onClick={onQuickBook}
+            onClick={() => onQuickBook(item)}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06 }}
@@ -2552,10 +2552,8 @@ export default function ClubApp() {
     }
     showToast("Note sent · concierge will reply by text");
   };
-  const handleQuickBook = () => {
-    const e = nextOpenEvent();
-    if (e) openReserveFor(e.id);
-    else showToast("No open events to hold");
+  const handleQuickBook = (item) => {
+    showToast(`${item.detail} · held`);
   };
 
   const showToast = (msg) => {
