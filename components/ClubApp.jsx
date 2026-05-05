@@ -264,10 +264,10 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
           className="mt-3 text-base italic leading-relaxed"
           style={{ color: MARBLE + "EE", fontFamily: fontStack.display }}
         >
-          {firstName} — the sommelier set aside a half-bottle of the '22 Tres Colline Pinot for Thursday's wine night. We'll have it waiting.
+          {firstName} — we saw your request and have your favorite tequila in. Fortaleza Reposado, waiting for you.
         </p>
         <p className="mt-4 text-right text-[10px] tracking-[0.3em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-          — Eli, head sommelier
+          — The Oak Room
         </p>
       </motion.div>
 
