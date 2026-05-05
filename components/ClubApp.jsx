@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar,
@@ -1956,10 +1956,17 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
   );
 };
 
-const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
+const ReserveScreen = ({ events, onSubmit, state, dispatch, guestPanelTrigger }) => {
   const event = events.find((e) => e.id === state.eventId);
 
   const [guestOpen, setGuestOpen] = useState(false);
+
+  useEffect(() => {
+    if (guestPanelTrigger > 0) {
+      setGuestOpen(true);
+      setGuestSubmitted(false);
+    }
+  }, [guestPanelTrigger]);
   const [guestCount, setGuestCount] = useState(1);
   const [guestFields, setGuestFields] = useState([{ name: "", phone: "" }]);
   const [guestSubmitted, setGuestSubmitted] = useState(false);
@@ -2529,6 +2536,7 @@ export default function ClubApp() {
   const [events, setEvents] = useState(EVENTS);
   const [guests, setGuests] = useState(INITIAL_GUESTS);
   const [toast, setToast] = useState(null);
+  const [guestPanelTrigger, setGuestPanelTrigger] = useState(0);
   const [reserveState, reserveDispatch] = useReducer(
     reserveReducer,
     initialReserveState
@@ -2553,7 +2561,8 @@ export default function ClubApp() {
     showToast("Note sent · concierge will reply by text");
   };
   const handleQuickBook = (item) => {
-    showToast(`${item.detail} · held`);
+    setTab("reserve");
+    setGuestPanelTrigger((n) => n + 1);
   };
 
   const showToast = (msg) => {
@@ -2730,6 +2739,7 @@ export default function ClubApp() {
                     onSubmit={handleReserveSubmit}
                     state={reserveState}
                     dispatch={reserveDispatch}
+                    guestPanelTrigger={guestPanelTrigger}
                   />
                 )}
                 {tab === "rules" && <RulesScreen />}
