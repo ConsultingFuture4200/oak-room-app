@@ -144,7 +144,7 @@ const INITIAL_GUESTS = [
 
 const HOUSE_RULES = [
   { n: "I.", rule: "Discretion above all. No photographs past the foyer." },
-  { n: "II.", rule: "Dress with intention. Jacket required after 8pm." },
+  { n: "II.", rule: "Dress with intention." },
   { n: "III.", rule: "Phones silenced. Calls taken in the antechamber only." },
   { n: "IV.", rule: "Members are responsible for their guests, in conduct and in tab." },
   { n: "V.", rule: "What is said at the bar stays at the bar." },
@@ -227,7 +227,7 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
     setNote("");
   };
 
-  const chips = ["Reserve the Saloon", "Add a guest tonight", "Recommend a wine"];
+  const chips = ["Book a hotel room", "Add a guest tonight", "Recommend a wine"];
 
   return (
     <div className="px-5 pt-3 pb-32">
@@ -264,12 +264,59 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
           className="mt-3 text-base italic leading-relaxed"
           style={{ color: MARBLE + "EE", fontFamily: fontStack.display }}
         >
-          {firstName} — the sommelier set aside a half-bottle of the '22 Tres Colline Pinot for Thursday's wine night. We'll have it waiting.
+          {firstName} — we saw your request and have your favorite tequila in. Fortaleza Reposado, waiting for you.
         </p>
         <p className="mt-4 text-right text-[10px] tracking-[0.3em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-          — Eli, head sommelier
+          — The Oak Room
         </p>
       </motion.div>
+
+      {/* Upcoming reservations — only shown when at least one event is reserved */}
+      {events.some((e) => e.rsvp) && (
+        <>
+          <Divider label="Your upcoming" />
+          <div className="space-y-2.5">
+            {events.filter((e) => e.rsvp).map((e, i) => (
+              <motion.div
+                key={e.id}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 * i, duration: 0.4 }}
+                className="flex items-stretch gap-3 p-3"
+                style={{
+                  background: GRAPHITE_2,
+                  border: `1px solid ${BRASS}44`,
+                }}
+              >
+                {e.image && (
+                  <div
+                    className="flex-shrink-0 overflow-hidden"
+                    style={{ width: 56, height: 56, border: `1px solid ${BRASS}55` }}
+                  >
+                    <img src={e.image} alt="" aria-hidden className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-[9px] tracking-[0.35em] uppercase" style={{ color: BRASS, fontFamily: fontStack.body }}>
+                    {e.date} · {e.time}
+                  </p>
+                  <p className="text-sm mt-0.5 leading-tight" style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}>
+                    {e.title}
+                  </p>
+                </div>
+                <div className="flex items-center flex-shrink-0">
+                  <span
+                    className="text-[9px] tracking-[0.3em] uppercase px-2 py-1 flex items-center gap-1"
+                    style={{ color: BRASS, border: `1px solid ${BRASS}`, fontFamily: fontStack.body }}
+                  >
+                    <Check size={9} /> Held
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </>
+      )}
 
       <Divider label="Curated for you" />
 
@@ -337,35 +384,44 @@ const ForYouScreen = ({ events, onRSVP, onConcierge, onQuickBook }) => {
 
       <Divider label="Your usual" />
 
-      <motion.button
-        onClick={onQuickBook}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileTap={{ scale: 0.99 }}
-        className="w-full text-left p-4 flex items-center justify-between"
-        style={{
-          background: `linear-gradient(160deg, ${GRAPHITE_2} 0%, ${GRAPHITE} 100%)`,
-          border: `1px solid ${VEIN}33`,
-        }}
-      >
-        <div>
-          <p className="text-[9px] tracking-[0.4em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-            The pattern
-          </p>
-          <p
-            className="text-base mt-1"
-            style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}
+      <div className="space-y-3">
+        {[
+          { label: "The pattern", detail: "Bar Top · Friday · 7 PM", party: "You +3" },
+          { label: "The pattern", detail: "Window View · Thursday · 8:30 PM", party: "You +1" },
+        ].map((item, i) => (
+          <motion.button
+            key={i}
+            onClick={onQuickBook}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.06 }}
+            whileTap={{ scale: 0.99 }}
+            className="w-full text-left p-4 flex items-center justify-between"
+            style={{
+              background: `linear-gradient(160deg, ${GRAPHITE_2} 0%, ${GRAPHITE} 100%)`,
+              border: `1px solid ${VEIN}33`,
+            }}
           >
-            The Saloon · Friday · 7 PM · two
-          </p>
-        </div>
-        <span
-          className="text-[9px] tracking-[0.3em] uppercase px-2 py-1"
-          style={{ color: BRASS, border: `1px solid ${BRASS}`, fontFamily: fontStack.body }}
-        >
-          Hold it
-        </span>
-      </motion.button>
+            <div>
+              <p className="text-[9px] tracking-[0.4em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+                {item.label}
+              </p>
+              <p className="text-base mt-1" style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}>
+                {item.detail}
+              </p>
+              <p className="text-lg mt-1" style={{ fontFamily: fontStack.display, color: BRASS, fontWeight: 400, fontStyle: "italic" }}>
+                {item.party}
+              </p>
+            </div>
+            <span
+              className="text-[9px] tracking-[0.3em] uppercase px-2 py-1"
+              style={{ color: BRASS, border: `1px solid ${BRASS}`, fontFamily: fontStack.body }}
+            >
+              Hold it
+            </span>
+          </motion.button>
+        ))}
+      </div>
 
       <Divider label="Concierge" />
 
@@ -439,7 +495,7 @@ const HomeScreen = ({ events, onRSVP }) => {
             className="text-3xl leading-none mt-1"
             style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400, letterSpacing: "-0.01em" }}
           >
-            The book of <em style={{ color: BRASS }}>hours</em>
+            The book of <em style={{ color: BRASS }}>events</em>
           </h1>
         </div>
         <span className="text-[9px] tracking-[0.3em] uppercase pb-1" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
@@ -1002,7 +1058,15 @@ const LedgerCard = () => {
   const [target, setTarget] = useState(STARTING_BALANCE);
   const [settling, setSettling] = useState(false);
   const [settled, setSettled] = useState(false);
+  const [billOpen, setBillOpen] = useState(false);
+  const [billEmail, setBillEmail] = useState("");
+  const [billSent, setBillSent] = useState(false);
   const live = useCountTo(target, 1100);
+
+  const handleBillSend = () => {
+    if (!billEmail.trim()) return;
+    setBillSent(true);
+  };
 
   const handleSettle = () => {
     if (settling || settled) return;
@@ -1159,15 +1223,193 @@ const LedgerCard = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Bill request — inline, bottom of card */}
+      <div className="relative mt-5 pt-4" style={{ borderTop: `1px solid ${VEIN}22` }}>
+        <button
+          onClick={() => { setBillOpen((o) => !o); setBillSent(false); }}
+          className="w-full flex items-center justify-between"
+        >
+          <div className="flex items-center gap-2">
+            <Send size={12} style={{ color: billSent ? BRASS : VEIN_TEXT }} />
+            <span
+              className="text-[10px] tracking-[0.3em] uppercase"
+              style={{ color: billSent ? BRASS : VEIN_TEXT, fontFamily: fontStack.body }}
+            >
+              {billSent ? "Statement requested" : "Request for expenses"}
+            </span>
+          </div>
+          {!billSent && (
+            <motion.span
+              animate={{ rotate: billOpen ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              style={{ color: VEIN_TEXT, display: "inline-block", lineHeight: 1, fontSize: 12 }}
+            >
+              ▾
+            </motion.span>
+          )}
+        </button>
+
+        <AnimatePresence>
+          {billOpen && !billSent && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22 }}
+              style={{ overflow: "hidden" }}
+            >
+              <div className="pt-3 space-y-2.5">
+                <p className="text-[11px] leading-relaxed text-left" style={{ color: TEXT_DIM, fontFamily: fontStack.body }}>
+                  We'll email an itemized statement — ready for expense reporting.
+                </p>
+                <input
+                  type="email"
+                  value={billEmail}
+                  onChange={(e) => setBillEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                  style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
+                />
+                <button
+                  onClick={handleBillSend}
+                  className="w-full py-2 text-[11px] tracking-[0.3em] uppercase"
+                  style={{
+                    background: billEmail.trim() ? BRASS : "transparent",
+                    color: billEmail.trim() ? "#1a1a1a" : VEIN_TEXT,
+                    border: `1px solid ${billEmail.trim() ? BRASS : VEIN + "33"}`,
+                    fontFamily: fontStack.body,
+                    opacity: billEmail.trim() ? 1 : 0.55,
+                  }}
+                >
+                  Send statement
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </motion.div>
+  );
+};
+
+const LEDGER_ENTRIES = [
+  "May 4, 2026",
+  "Apr 28, 2026",
+  "Apr 19, 2026",
+  "Apr 11, 2026",
+  "Mar 29, 2026",
+];
+
+const ExpenseLedger = () => {
+  const [openIdx, setOpenIdx] = useState(null);
+  const [emails, setEmails] = useState({});
+  const [sent, setSent] = useState({});
+
+  const toggle = (i) => setOpenIdx((prev) => (prev === i ? null : i));
+
+  const handleSend = (i) => {
+    if (!emails[i]?.trim()) return;
+    setSent((s) => ({ ...s, [i]: true }));
+    setOpenIdx(null);
+  };
+
+  return (
+    <div style={{ border: `1px solid ${VEIN}33` }}>
+      {LEDGER_ENTRIES.map((date, i) => (
+        <React.Fragment key={i}>
+          {/* Two-column row */}
+          <div
+            className="grid grid-cols-2"
+            style={{
+              borderBottom: `1px solid ${VEIN}22`,
+            }}
+          >
+            {/* Left — date */}
+            <div
+              className="px-4 py-3.5 flex flex-col justify-center"
+              style={{ borderRight: `1px solid ${VEIN}22` }}
+            >
+              {i === 0 && (
+                <p className="text-[9px] tracking-[0.35em] uppercase mb-1" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+                  Date
+                </p>
+              )}
+              <p className="text-[13px]" style={{ color: i === 0 ? MARBLE : MARBLE + "BB", fontFamily: fontStack.display, fontWeight: 400 }}>
+                {date}
+              </p>
+            </div>
+
+            {/* Right — request */}
+            <button
+              onClick={() => !sent[i] && toggle(i)}
+              className="px-4 py-3.5 text-left flex flex-col justify-center"
+              style={{ background: openIdx === i ? GRAPHITE_2 : "transparent" }}
+            >
+              {i === 0 && (
+                <p className="text-[9px] tracking-[0.35em] uppercase mb-1" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+                  Expenses
+                </p>
+              )}
+              {sent[i] ? (
+                <p className="text-[13px]" style={{ color: BRASS, fontFamily: fontStack.display, fontStyle: "italic" }}>
+                  Statement sent
+                </p>
+              ) : (
+                <p className="text-[13px]" style={{ color: i === 0 ? MARBLE : MARBLE + "BB", fontFamily: fontStack.display, fontWeight: 400 }}>
+                  Request Itemized <span style={{ color: BRASS }}>→</span>
+                </p>
+              )}
+            </button>
+          </div>
+
+          {/* Expandable email form */}
+          <AnimatePresence>
+            {openIdx === i && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.22 }}
+                style={{ overflow: "hidden" }}
+              >
+                <div className="px-4 py-4 space-y-3" style={{ background: GRAPHITE_2, borderBottom: `1px solid ${VEIN}22` }}>
+                  <p className="text-[11px] leading-relaxed" style={{ color: TEXT_DIM, fontFamily: fontStack.body }}>
+                    We'll email an itemized statement for {date} — ready for expense reporting.
+                  </p>
+                  <input
+                    type="email"
+                    value={emails[i] || ""}
+                    onChange={(e) => setEmails((prev) => ({ ...prev, [i]: e.target.value }))}
+                    placeholder="your@email.com"
+                    className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                    style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
+                  />
+                  <button
+                    onClick={() => handleSend(i)}
+                    className="w-full py-2 text-[11px] tracking-[0.3em] uppercase"
+                    style={{
+                      background: emails[i]?.trim() ? BRASS : "transparent",
+                      color: emails[i]?.trim() ? "#1a1a1a" : VEIN_TEXT,
+                      border: `1px solid ${emails[i]?.trim() ? BRASS : VEIN + "33"}`,
+                      fontFamily: fontStack.body,
+                      opacity: emails[i]?.trim() ? 1 : 0.55,
+                    }}
+                  >
+                    Send statement
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </React.Fragment>
+      ))}
+    </div>
   );
 };
 
 const MembershipScreen = ({ guests = [] }) => (
   <div className="px-6 pt-3 pb-32">
-    <p className="text-[10px] tracking-[0.5em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-      Bona fides
-    </p>
     <h1 className="text-4xl mt-2 leading-none" style={{ fontFamily: fontStack.display, color: MARBLE, fontWeight: 400 }}>
       Your <em style={{ color: BRASS }}>standing</em>
     </h1>
@@ -1260,8 +1502,6 @@ const MembershipScreen = ({ guests = [] }) => (
 
     <Divider label="Or carry it on your iPhone" />
 
-    <WalletPassFace />
-
     <a
       href="/api/wallet-pass"
       className="mt-5 w-full py-3.5 flex items-center justify-center gap-2.5 text-[11px] tracking-[0.3em] uppercase no-underline transition-all"
@@ -1276,30 +1516,6 @@ const MembershipScreen = ({ guests = [] }) => (
       <Wallet size={14} strokeWidth={1.6} />
       Add to Apple Wallet
     </a>
-    <p className="text-[10px] tracking-[0.3em] uppercase mt-2 text-center" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-      Replace the metal card · works at the door
-    </p>
-
-    <Divider label="Privileges" />
-
-    <div className="space-y-3">
-      {[
-        { k: "Guest allowance", v: "+4 per visit" },
-        { k: "Reservation window", v: "30 days advance" },
-        { k: "Cellar access", v: "Founders' list" },
-        { k: "House credit", v: "$400 / month" },
-        { k: "Sister venues", v: "Mastro's · Bloom & Bee · Bouchée" },
-      ].map((p, i) => (
-        <div key={i} className="flex justify-between items-baseline pb-2" style={{ borderBottom: `1px dashed ${VEIN}33` }}>
-          <span className="text-[11px] tracking-[0.2em] uppercase" style={{ color: MARBLE + "AA", fontFamily: fontStack.body }}>
-            {p.k}
-          </span>
-          <span className="text-sm" style={{ color: BRASS, fontFamily: fontStack.display, fontStyle: "italic" }}>
-            {p.v}
-          </span>
-        </div>
-      ))}
-    </div>
 
     <Divider label="Your guests this month" />
 
@@ -1341,40 +1557,9 @@ const MembershipScreen = ({ guests = [] }) => (
       </div>
     )}
 
-    <Divider label="The ledger · due May 31" />
+    <Divider label="The ledger" />
 
-    <LedgerCard />
-
-    <div className="mt-5 space-y-3.5">
-      {[
-        { d: "Apr 28", what: "Mastro's · party of 4", amt: "428.00" },
-        { d: "Apr 24", what: "Post Oak Saloon · bar tab", amt: "186.50" },
-        { d: "Apr 18", what: "Bouchée Patisserie · brunch", amt: "120.00" },
-        { d: "Apr 12", what: "Founders' dues · monthly", amt: "850.00", credit: true },
-        { d: "Apr 5", what: "House credit applied", amt: "−400.00", positive: true },
-      ].map((t, i) => (
-        <div key={i} className="flex justify-between items-baseline">
-          <div>
-            <p className="text-[10px] tracking-[0.3em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-              {t.d}
-            </p>
-            <p className="text-sm mt-0.5" style={{ color: MARBLE, fontFamily: fontStack.display, fontStyle: t.credit ? "italic" : "normal" }}>
-              {t.what}
-            </p>
-          </div>
-          <span
-            className="font-light"
-            style={{
-              color: t.positive ? BRASS : MARBLE,
-              fontFamily: fontStack.mono,
-              fontSize: 14,
-            }}
-          >
-            {t.positive ? "" : "$"}{t.amt}
-          </span>
-        </div>
-      ))}
-    </div>
+    <ExpenseLedger />
 
     <div className="mt-10 pt-6 text-center" style={{ borderTop: `1px solid ${VEIN}22` }}>
       <p className="text-[10px] tracking-[0.6em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
@@ -1770,6 +1955,52 @@ const ReserveDetailSheet = ({ event, state, dispatch, onSubmit }) => {
 const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
   const event = events.find((e) => e.id === state.eventId);
 
+  const [guestOpen, setGuestOpen] = useState(false);
+  const [guestCount, setGuestCount] = useState(1);
+  const [guestFields, setGuestFields] = useState([{ name: "", phone: "" }]);
+  const [guestSubmitted, setGuestSubmitted] = useState(false);
+
+  const updateCount = (next) => {
+    const n = Math.max(1, next);
+    setGuestCount(n);
+    setGuestFields((prev) => {
+      const arr = [...prev];
+      while (arr.length < n) arr.push({ name: "", phone: "" });
+      return arr.slice(0, n);
+    });
+    setGuestSubmitted(false);
+  };
+
+  const updateField = (i, key, val) => {
+    setGuestFields((prev) => prev.map((g, idx) => idx === i ? { ...g, [key]: val } : g));
+    setGuestSubmitted(false);
+  };
+
+  const canSubmitGuests = guestFields.some((g) => g.name.trim());
+
+  const [tableOpen, setTableOpen] = useState(false);
+  const [tableType, setTableType] = useState(null);
+  const [tableSubmitted, setTableSubmitted] = useState(false);
+  const [tableGuestCount, setTableGuestCount] = useState(1);
+  const [tableGuestFields, setTableGuestFields] = useState([{ name: "", phone: "" }]);
+
+  const updateTableCount = (next) => {
+    const n = Math.max(1, next);
+    setTableGuestCount(n);
+    setTableGuestFields((prev) => {
+      const arr = [...prev];
+      while (arr.length < n) arr.push({ name: "", phone: "" });
+      return arr.slice(0, n);
+    });
+  };
+
+  const updateTableField = (i, key, val) => {
+    setTableGuestFields((prev) => prev.map((g, idx) => idx === i ? { ...g, [key]: val } : g));
+  };
+
+  const TABLE_TYPES = ["Table", "Window View", "Bar"];
+  const canSubmitTable = !!tableType;
+
   return (
     <div className="px-6 pt-3 pb-32">
       <p
@@ -1784,6 +2015,297 @@ const ReserveScreen = ({ events, onSubmit, state, dispatch }) => {
       >
         <em style={{ color: BRASS }}>Reserve</em>
       </h1>
+
+      {/* Guest reservation panel */}
+      <div className="mt-5 mb-1" style={{ border: `1px solid ${VEIN}33`, background: GRAPHITE_2 }}>
+        <button
+          onClick={() => { setGuestOpen((o) => !o); setGuestSubmitted(false); }}
+          className="w-full flex items-center justify-between px-4 py-3"
+        >
+          <div className="flex items-center gap-2">
+            <UserPlus size={14} style={{ color: BRASS }} />
+            <span
+              className="text-[11px] tracking-[0.25em] uppercase"
+              style={{ color: MARBLE, fontFamily: fontStack.body }}
+            >
+              Bring a Guest
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            {!guestOpen && (
+              <span
+                className="text-[10px] tracking-[0.2em] uppercase"
+                style={{ color: guestSubmitted ? BRASS : BRASS, fontFamily: fontStack.body }}
+              >
+                {guestSubmitted ? "Request sent" : `${guestCount} ${guestCount === 1 ? "guest" : "guests"}`}
+              </span>
+            )}
+            <motion.span
+              animate={{ rotate: guestOpen ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              style={{ color: VEIN_TEXT, display: "inline-block", lineHeight: 1 }}
+            >
+              ▾
+            </motion.span>
+          </div>
+        </button>
+
+        <AnimatePresence>
+          {guestOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22 }}
+              style={{ overflow: "hidden", borderTop: `1px solid ${VEIN}22` }}
+            >
+              <div className="px-4 py-4 space-y-4">
+                {/* Counter */}
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px]" style={{ color: TEXT_DIM, fontFamily: fontStack.body }}>
+                    Number of guests
+                  </span>
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => updateCount(guestCount - 1)}
+                      className="w-7 h-7 flex items-center justify-center"
+                      style={{ border: `1px solid ${VEIN}44`, color: MARBLE }}
+                    >
+                      –
+                    </button>
+                    <span
+                      className="text-lg w-4 text-center"
+                      style={{ color: MARBLE, fontFamily: fontStack.display, fontWeight: 400 }}
+                    >
+                      {guestCount}
+                    </span>
+                    <button
+                      onClick={() => updateCount(guestCount + 1)}
+                      className="w-7 h-7 flex items-center justify-center"
+                      style={{ border: `1px solid ${VEIN}44`, color: MARBLE }}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Per-guest fields */}
+                {guestFields.map((g, i) => (
+                  <div key={i} className="space-y-2">
+                    {guestCount > 1 && (
+                      <p className="text-[10px] tracking-[0.3em] uppercase" style={{ color: BRASS, fontFamily: fontStack.body }}>
+                        Guest {i + 1}
+                      </p>
+                    )}
+                    <input
+                      type="text"
+                      value={g.name}
+                      onChange={(e) => updateField(i, "name", e.target.value)}
+                      placeholder="Full name"
+                      className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                      style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
+                    />
+                    <input
+                      type="tel"
+                      value={g.phone}
+                      onChange={(e) => updateField(i, "phone", e.target.value)}
+                      placeholder="(000) 000-0000"
+                      className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                      style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
+                    />
+                  </div>
+                ))}
+
+                {/* Note */}
+                <p className="text-[11px] leading-relaxed" style={{ color: TEXT_DIM, fontFamily: fontStack.body }}>
+                  Up to 3 guests are included with your membership. The club will follow up to confirm your request.
+                </p>
+
+                {/* Submit */}
+                <AnimatePresence mode="wait">
+                  {guestSubmitted ? (
+                    <motion.p
+                      key="done"
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-[11px] tracking-[0.25em] uppercase text-center py-2"
+                      style={{ color: BRASS, fontFamily: fontStack.body }}
+                    >
+                      Request sent · the club will confirm
+                    </motion.p>
+                  ) : (
+                    <motion.button
+                      key="btn"
+                      onClick={() => { if (canSubmitGuests) setGuestSubmitted(true); }}
+                      className="w-full py-2.5 text-[11px] tracking-[0.3em] uppercase"
+                      style={{
+                        background: canSubmitGuests ? BRASS : "transparent",
+                        color: canSubmitGuests ? "#1a1a1a" : VEIN_TEXT,
+                        border: `1px solid ${canSubmitGuests ? BRASS : VEIN + "33"}`,
+                        fontFamily: fontStack.body,
+                        opacity: canSubmitGuests ? 1 : 0.5,
+                      }}
+                    >
+                      Submit guest request
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Book a table panel */}
+      <div className="mt-3 mb-1" style={{ border: `1px solid ${VEIN}33`, background: GRAPHITE_2 }}>
+        <button
+          onClick={() => { setTableOpen((o) => !o); setTableSubmitted(false); }}
+          className="w-full flex items-center justify-between px-4 py-3"
+        >
+          <div className="flex items-center gap-2">
+            <Wine size={14} style={{ color: BRASS }} />
+            <span className="text-[11px] tracking-[0.25em] uppercase" style={{ color: MARBLE, fontFamily: fontStack.body }}>
+              Book a Table
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            {!tableOpen && (
+              <span className="text-[10px] tracking-[0.2em] uppercase" style={{ color: BRASS, fontFamily: fontStack.body }}>
+                {tableSubmitted ? "Request sent" : tableType ? tableType : ""}
+              </span>
+            )}
+            <motion.span
+              animate={{ rotate: tableOpen ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              style={{ color: VEIN_TEXT, display: "inline-block", lineHeight: 1 }}
+            >
+              ▾
+            </motion.span>
+          </div>
+        </button>
+
+        <AnimatePresence>
+          {tableOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22 }}
+              style={{ overflow: "hidden", borderTop: `1px solid ${VEIN}22` }}
+            >
+              <div className="px-4 py-4 space-y-4">
+                {/* Table type selector */}
+                <div className="space-y-2">
+                  <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+                    Seating preference
+                  </p>
+                  <div className="space-y-2">
+                    {TABLE_TYPES.map((t) => (
+                      <button
+                        key={t}
+                        onClick={() => { setTableType(t); setTableSubmitted(false); }}
+                        className="w-full text-left px-3 py-2.5 text-[13px] flex items-center justify-between"
+                        style={{
+                          border: `1px solid ${tableType === t ? BRASS : VEIN + "44"}`,
+                          background: tableType === t ? BRASS + "11" : "transparent",
+                          color: tableType === t ? BRASS : MARBLE,
+                          fontFamily: fontStack.display,
+                          fontWeight: 400,
+                        }}
+                      >
+                        {t}
+                        {tableType === t && <Check size={13} style={{ color: BRASS }} />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Guest count + fields */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] tracking-[0.25em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
+                      Party size
+                    </span>
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => updateTableCount(tableGuestCount - 1)}
+                        className="w-7 h-7 flex items-center justify-center"
+                        style={{ border: `1px solid ${VEIN}44`, color: MARBLE }}
+                      >–</button>
+                      <span className="text-lg w-4 text-center" style={{ color: MARBLE, fontFamily: fontStack.display, fontWeight: 400 }}>
+                        {tableGuestCount}
+                      </span>
+                      <button
+                        onClick={() => updateTableCount(tableGuestCount + 1)}
+                        className="w-7 h-7 flex items-center justify-center"
+                        style={{ border: `1px solid ${VEIN}44`, color: MARBLE }}
+                      >+</button>
+                    </div>
+                  </div>
+
+                  {tableGuestFields.map((g, i) => (
+                    <div key={i} className="space-y-2">
+                      {tableGuestCount > 1 && (
+                        <p className="text-[10px] tracking-[0.3em] uppercase" style={{ color: BRASS, fontFamily: fontStack.body }}>
+                          Guest {i + 1}
+                        </p>
+                      )}
+                      <input
+                        type="text"
+                        value={g.name}
+                        onChange={(e) => updateTableField(i, "name", e.target.value)}
+                        placeholder="Full name"
+                        className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                        style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
+                      />
+                      <input
+                        type="tel"
+                        value={g.phone}
+                        onChange={(e) => updateTableField(i, "phone", e.target.value)}
+                        placeholder="(000) 000-0000"
+                        className="w-full bg-transparent px-3 py-2 text-[13px] outline-none"
+                        style={{ border: `1px solid ${VEIN}44`, color: MARBLE, fontFamily: fontStack.body }}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Submit */}
+                <AnimatePresence mode="wait">
+                  {tableSubmitted ? (
+                    <motion.p
+                      key="done"
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-[11px] tracking-[0.25em] uppercase text-center py-2"
+                      style={{ color: BRASS, fontFamily: fontStack.body }}
+                    >
+                      Request sent · the club will confirm
+                    </motion.p>
+                  ) : (
+                    <motion.button
+                      key="btn"
+                      onClick={() => { if (canSubmitTable) { setTableSubmitted(true); setTableOpen(false); } }}
+                      className="w-full py-2.5 text-[11px] tracking-[0.3em] uppercase"
+                      style={{
+                        background: canSubmitTable ? BRASS : "transparent",
+                        color: canSubmitTable ? "#1a1a1a" : VEIN_TEXT,
+                        border: `1px solid ${canSubmitTable ? BRASS : VEIN + "33"}`,
+                        fontFamily: fontStack.body,
+                        opacity: canSubmitTable ? 1 : 0.5,
+                      }}
+                    >
+                      Request table
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       <Divider label="Upcoming · open seats" />
 
@@ -2162,7 +2684,7 @@ export default function ClubApp() {
           <div className="flex items-center justify-between px-6 pt-4 pb-3 flex-shrink-0" style={{ borderBottom: `1px solid ${VEIN}22` }}>
             <div>
               <p className="text-[10px] tracking-[0.5em] uppercase" style={{ color: VEIN_TEXT, fontFamily: fontStack.body }}>
-                Member · {MEMBER.tier}
+                Members
               </p>
               <p className="text-lg leading-none mt-1" style={{ fontFamily: fontStack.display, color: MARBLE, fontStyle: "italic" }}>
                 Oak Room Houston
