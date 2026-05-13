@@ -25,7 +25,7 @@ import {
 // Graphite + Carrara marble • antique-brass accents
 // ───────────────────────────────────────────────────────────────────
 
-const BRASS = "#B8945A";        // antique brass — single accent, echoes the brushed-steel pass
+/* const BRASS = "#B8945A";        // antique brass — single accent, echoes the brushed-steel pass
 const BRASS_DEEP = "#8E6E3F";   // deeper brass for gradients, hover, pressed states
 const GRAPHITE = "#1C1D20";      // primary surface
 const GRAPHITE_2 = "#26282C";    // raised surface
@@ -35,6 +35,22 @@ const MARBLE_2 = "#E8E3D8";      // veined shadow
 const VEIN = "#9AA3AE";          // cool grey vein — borders, dividers, SVG strokes
 const VEIN_TEXT = "#B8C2CC";     // brighter vein — text-only, ≈5.2:1 on GRAPHITE for WCAG AA
 const TEXT_DIM = "#A4A8AE";      // bumped from #8B8E94 for AA contrast
+ */
+
+/* 
+purple - ff00f7
+JOEL - alt-colors: 
+*/
+const BRASS = "#00DB30";        // All main letters  - antique brass — single accent, echoes the brushed-steel pass
+const BRASS_DEEP = "#ff00f7";   // deeper brass for gradients, hover, pressed states
+const GRAPHITE = "#fff";     // primary surface
+const GRAPHITE_2 = "#fff";    // raised surface
+const CHARCOAL = "#fff";      // deepest
+const MARBLE = "#fff";        // off-white, warm
+const MARBLE_2 = "#fff";      // veined shadow
+const VEIN = "#fff";          // cool grey vein — borders, dividers, SVG strokes
+const VEIN_TEXT = "#fff";     // brighter vein — text-only, ≈5.2:1 on GRAPHITE for WCAG AA
+const TEXT_DIM = "#fff";      // bumped from #8B8E94 for AA contrast
 
 // Wallet pass — matches the physical Oak Room metal card: brushed warm
 // silver, dark engraved oak, framed "OAK ROOM PRIVATE" wordmark. Different
@@ -2663,8 +2679,26 @@ export default function ClubApp() {
         : `${slots.length} invitation${slots.length === 1 ? "" : "s"} sent`
     );
   };
+/* 
 
+JOEL : adding a slow floating animation to the phone frame, 
+to give it a bit more life. 
+It's subtle, but I think it adds a nice touch of polish and makes 
+the screen feel a bit more dynamic. The animation is defined in a 
+keyframes block and applied to the outermost div that represents the phone frame. 
+It gently moves the frame up and down in a loop, creating a floating effect. 
+(AI said this, not me but its mostly right)
+
+ */
   return (
+    <>
+    <style>{`
+    @keyframes float {
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+  `}</style>
     <div
       // Desktop: brass-glow background + flex-center the phone-frame mockup.
       // Mobile / PWA standalone: outer wrapper just fills the viewport so the
@@ -2676,6 +2710,7 @@ export default function ClubApp() {
           radial-gradient(ellipse at bottom, ${GRAPHITE_2} 0%, ${CHARCOAL} 60%, #000 100%)
         `,
         fontFamily: fontStack.body,
+        animation: 'float 6s ease-in-out infinite' 
       }}
     >
       {/* Phone frame — chrome only on desktop. Mobile goes edge-to-edge. */}
@@ -2845,5 +2880,6 @@ export default function ClubApp() {
         </div>
       </div>
     </div>
+    </>
   );
 }
